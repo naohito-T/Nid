@@ -2,3 +2,26 @@
 
 個人で使う程度のためserverlessでいい。
 albを理解するためのProject
+
+## Purpose
+
+naohito-T Provides login functionality for client projects.
+
+## Backend
+
+serverless-frameworkにする。
+
+### localstack
+[参考URL](https://qiita.com/mmclsntr/items/709863ba98a4855988f3)
+
+http://localhost:24566/
+`{"status": "running"}`
+
+- Dynamodb
+http://localhost:4569
+- S3
+http://localhost:4572
+- ses
+http://localhost:4579
+- sqs
+http://localhost:4576
