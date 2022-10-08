@@ -1,0 +1,4 @@
+# Architecture
+
+個人で使う程度のためserverlessでいい。
+albを理解するためのProject

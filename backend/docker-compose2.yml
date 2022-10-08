@@ -1,0 +1,28 @@
+version: 3.8
+services:
+  db:
+    image: postgres:12.2-alpine
+    ports:
+      - ${POSTGRES_PORT-5432}:5432
+    volumes:
+      - ./docker/postgres/init.d:/docker-entrypoint-initdb.d
+      - ./docker/postgres/pgdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_INITDB_ARGS: '--encoding=UTF-8'
+      POSTGRES_DB: postgres
+    hostname: postgres
+    restart: always
+    user: root
+  aws:
+    platform: linux/amd64
+    image: localstack/localstack-light:0.12.3
+    ports:
+      - ${LOCALSTACK_PORT-4566}:4566
+    environment:
+      LOCALSTACK_SERVICES: dynamodb,s3,ses,sqs
+      DEFAULT_REGION: ap-northeast-1
+      USE_LIGHT_IMAGE: 1
+      SKIP_INFRA_DOWNLOADS: 1
+      START_WEB: 0
