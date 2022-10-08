@@ -1,0 +1,3 @@
+[submodule "tools/ept"]
+	path = tools/ept
+	url = git@github.com:naohito-T-org/ept.git
