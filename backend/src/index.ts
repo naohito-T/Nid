@@ -51,7 +51,7 @@ AppDataSource.initialize()
     );
 
     console.log(
-      'Express server has started on port 3100. Open http://localhost:3100/users to see results',
+      'Express server has Started!! on port 3100. Open http://localhost:3100/users to see results',
     );
   })
   .catch((error) => console.log(error));
