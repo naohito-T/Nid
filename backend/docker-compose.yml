@@ -1,7 +1,24 @@
 version: '3.8'
 services:
-# appはコマンドでstartさせる
-    
+  # appはコマンドでstartさせる
+  # dbをmigrationかける
+  # dbにseedを入れる
+  # watchでstartする
+  app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.local
+    ports:
+      - 3100:3100
+    volumes:
+      - .:/app:cached
+    env_file: ./env/.env
+    depends_on:
+      db:
+        condition: service_healthy
+      aws:
+        condition: service_healthy
+    command: yarn dev
   db:
     image: postgres:12
     ports:

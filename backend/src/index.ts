@@ -1,8 +1,8 @@
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import { Request, Response } from 'express';
-import { AppDataSource } from '@/db/data-source';
-import { Routes } from './routes';
+import { AppDataSource } from '@/db/setting/db.setting';
+import { Routes } from './routes/routes';
 import { User } from '@/db/entity/User';
 
 AppDataSource.initialize()
@@ -51,7 +51,7 @@ AppDataSource.initialize()
     );
 
     console.log(
-      'Express server has Started!! on port 3100. Open http://localhost:3100/users to see results',
+      'Express server has Started!!! on port 3100. Open http://localhost:3100/users to see results',
     );
   })
   .catch((error) => console.log(error));
