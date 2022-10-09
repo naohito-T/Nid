@@ -1,9 +1,10 @@
 {
-   "name": "backend",
+   "name": "nid-backend",
    "version": "0.0.1",
-   "description": "Nid backend.",
    "author": "naohito-T",
+   "description": "Nid backend.",
    "license": "MIT",
+   "private": true,
    "type": "commonjs",
    "engineStrict": true,
    "engines": {
