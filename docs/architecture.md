@@ -28,5 +28,12 @@ http://localhost:4579
 - sqs
 http://localhost:4576
 
-## TypeORM
+### TypeORM
 [CLI Document](https://orkhan.gitbook.io/typeorm/docs/using-cli)
+
+---
+
+## Frontend
+
+Project start.
+`npx create-next-app@latest frontend --ts`

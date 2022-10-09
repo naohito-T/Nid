@@ -10,6 +10,8 @@
       "emitDecoratorMetadata": true,
       "experimentalDecorators": true,
       // "strict": true,
+      // https://numb86-tech.hatenablog.com/entry/2020/07/11/160159
+      "esModuleInterop": true,
       "sourceMap": true,
       "baseUrl": "./",
       "outDir": "./build",
