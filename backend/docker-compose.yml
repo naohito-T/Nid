@@ -1,14 +1,24 @@
 version: '3.8'
 services:
-
-  # postgres:
-  #   image: "postgres:14.5"
-  #   ports:
-  #     - "5432:5432"
-  #   environment:
-  #     POSTGRES_USER: "test"
-  #     POSTGRES_PASSWORD: "test"
-  #     POSTGRES_DB: "test"
+  # appはコマンドでstartさせる
+  # dbをmigrationかける
+  # dbにseedを入れる
+  # watchでstartする
+  app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.local
+    ports:
+      - 3100:3100
+    volumes:
+      - .:/app:cached
+    env_file: ./env/.env
+    depends_on:
+      db:
+        condition: service_healthy
+      aws:
+        condition: service_healthy
+    command: yarn dev
   db:
     image: postgres:12
     ports:
@@ -17,6 +27,8 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
       POSTGRES_DB: "test"
+      # これなかったら気になる。
+      POSTGRES_INITDB_ARGS: '--encoding=UTF-8'
     volumes:
       - db-data:/var/lib/postgresql/data
     # 指定しておくとコンテナ停止時にサービスが再起動してくれる。
@@ -26,7 +38,25 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+  
+  aws:
+    platform: linux/amd64
+    image: localstack/localstack:0.14.4
+    ports:
+      - ${LOCALSTACK_PORT-24566}:4566 # すべてのサービスポート
+      - 8000:8080 # dashboard
+    volumes:
+      # データのマウント
+      - 'localstack-data:/tmp/localstack'
+    environment:
+      # 有効にするサービス
+      LOCALSTACK_SERVICES: dynamodb,s3,ses,sqs
+      DEFAULT_REGION: ap-northeast-1
+      USE_LIGHT_IMAGE: 1
+      SKIP_INFRA_DOWNLOADS: 1
+      START_WEB: 0
 
 volumes:
   # TODO 以下の記入について調べる（おそらく作成するだけでいい場合の最低構文）
   db-data: {}
+  localstack-data: {}
