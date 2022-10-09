@@ -1,14 +1,7 @@
 version: '3.8'
 services:
-
-  # postgres:
-  #   image: "postgres:14.5"
-  #   ports:
-  #     - "5432:5432"
-  #   environment:
-  #     POSTGRES_USER: "test"
-  #     POSTGRES_PASSWORD: "test"
-  #     POSTGRES_DB: "test"
+# appはコマンドでstartさせる
+    
   db:
     image: postgres:12
     ports:
@@ -17,6 +10,8 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
       POSTGRES_DB: "test"
+      # これなかったら気になる。
+      POSTGRES_INITDB_ARGS: '--encoding=UTF-8'
     volumes:
       - db-data:/var/lib/postgresql/data
     # 指定しておくとコンテナ停止時にサービスが再起動してくれる。

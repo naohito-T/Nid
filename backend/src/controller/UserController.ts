@@ -1,6 +1,6 @@
-import { NextFunction, Request, Response } from "express";
-import { User } from "../entity/User";
-import { AppDataSource } from "../data-source";
+import { NextFunction, Request, Response } from 'express';
+import { User } from '../db/entity/User';
+import { AppDataSource } from '../db/data-source';
 
 export class UserController {
   // private userRepository = getRepository(User)
@@ -11,7 +11,7 @@ export class UserController {
   }
 
   async one(request: Request, response: Response, next: NextFunction) {
-    return this.userRepository.findOne(request.params.id);
+    return this.userRepository.findOne({});
   }
 
   async save(request: Request, response: Response, next: NextFunction) {
@@ -20,7 +20,7 @@ export class UserController {
 
   async remove(request: Request, response: Response, next: NextFunction) {
     let userToRemove = await this.userRepository.findOneBy({
-      id: request.params.id,
+      id: request.params.id as unknown as number,
     });
     await this.userRepository.remove(userToRemove);
   }

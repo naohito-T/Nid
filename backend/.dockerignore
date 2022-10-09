@@ -1,6 +1,11 @@
 .idea/
 .vscode/
+.git/
+.gitignore
 node_modules/
+doc/
 build/
 tmp/
 temp/
+env
+README.md

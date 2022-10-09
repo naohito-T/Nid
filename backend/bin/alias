@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+PROJECT_NAME='nid'
+
+alias docker-compose="docker-compose -p ${PROJECT_NAME}"
+alias up="docker-compose up"
+alias down="docker-compose down"
