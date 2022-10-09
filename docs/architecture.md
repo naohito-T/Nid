@@ -11,6 +11,13 @@ naohito-T Provides login functionality for client projects.
 
 serverless-frameworkにする。
 
+- ハンドラー層: API Gatewayなどから入力を受け取り、バリデーションやオブジェクトの変換を行う
+- ドメイン層: ユースケースに対するビジネスロジックとインタフェースを定義する
+- インフラストラクチャ層: AWS SDKを利用したAWSサービスとのやりとりや外部APIへのアクセスを行う
+
+dddっぽく作ってるけど
+[参考URL](https://neos21.net/blog/2021/10/13-01.html)
+
 ### localstack
 
 [参考URL](https://qiita.com/mmclsntr/items/709863ba98a4855988f3)
