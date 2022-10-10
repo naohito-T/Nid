@@ -3,7 +3,6 @@ import { User } from '../db/entity/User';
 import { AppDataSource } from '@/db/setting/db.setting';
 
 export class UserController {
-  // private userRepository = getRepository(User)
   private userRepository = AppDataSource.getRepository(User);
 
   async all(request: Request, response: Response, next: NextFunction) {

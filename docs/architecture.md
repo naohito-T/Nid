@@ -18,6 +18,10 @@ serverless-frameworkにする。
 dddっぽく作ってるけど
 [参考URL](https://neos21.net/blog/2021/10/13-01.html)
 
+以下をやりたい。
+- localではdevとtestのdbを作成する
+- testに関してはtest DBに接続する。
+
 ### localstack
 
 [参考URL](https://qiita.com/mmclsntr/items/709863ba98a4855988f3)

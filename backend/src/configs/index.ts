@@ -1,7 +1,3 @@
-export class Configs {
-  private readonly RUN_ENV = process.env.NODE_ENV;
-
-  public get getRunEnv(): string {
-    return this.RUN_ENV;
-  }
-}
+export * from './app.config';
+export * from './enum.config';
+export * from './endpoint.config';

@@ -1,8 +1,8 @@
-import { Configs } from '@/configs';
+import { AppConfig } from '@/configs';
 
-const configs = new Configs();
+const appConfig = new AppConfig();
 
 export const AWSSettings = {
-  region: configs.getRunEnv === 'development' ? 'localhost' : '',
-  endpoint: configs.getRunEnv === 'development' ? 'http://localhost:4566' : '',
+  region: appConfig.getRunEnv === 'development' ? 'localhost' : '',
+  endpoint: appConfig.getRunEnv === 'development' ? 'http://localhost:4566' : '',
 };
