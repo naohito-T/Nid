@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -eu
+
+# --------------------------------------------------------------
+# localで起動したdynamoDBに対してGUIを提供します。
+# 以下のコマンドでテーブルが作成されているか確認して下さい。
+# aws --endpoint-url=http://localhost:24566 dynamodb list-tables
+# --------------------------------------------------------------
+
+DYNAMODB_ADMIN_PORT=4500
+
+env DYNAMO_ENDPOINT="${LOCAL_STACK_ENDPOINT}" \
+PORT="${DYNAMODB_ADMIN_PORT}" \
+npx dynamodb-admin
+

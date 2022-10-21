@@ -1,43 +1,48 @@
 {
-   "name": "nid-backend",
-   "version": "0.0.1",
-   "author": "naohito-T",
-   "description": "Nid backend.",
-   "license": "MIT",
-   "private": true,
-   "type": "commonjs",
-   "engineStrict": true,
-   "engines": {
-      "node": "^16.17.0",
-      "npm": "^8.15.0"
-   },
-   "scripts": {
-      "dev": "ts-node-dev -r tsconfig-paths/register src/index.ts",
-      "start": "ts-node -r tsconfig-paths/register src/index.ts",
-      "typeorm": "typeorm-ts-node-commonjs",
-      "migration": "typeorm-ts-node-commonjs migration:generate",
-      "format": "prettier -w './src/**/*.{js,ts,json}'"
-   },
-   "dependencies": {
-      "aws-sdk": "^2.1231.0",
-      "body-parser": "^1.19.1",
-      "connect-dynamodb": "^2.0.5",
-      "cors": "^2.8.5",
-      "express": "^4.17.2",
-      "express-session": "^1.17.3",
-      "pg": "^8.4.0",
-      "reflect-metadata": "^0.1.13",
-      "typeorm": "0.3.10"
-   },
-   "devDependencies": {
-      "@types/cors": "^2.8.12",
-      "@types/express": "^4.17.14",
-      "@types/express-session": "^1.17.5",
-      "@types/node": "^16.11.10",
-      "prettier": "^2.7.1",
-      "ts-node": "10.7.0",
-      "ts-node-dev": "^2.0.0",
-      "tsconfig-paths": "^4.1.0",
-      "typescript": "4.5.2"
-   }
+  "name": "nid-backend",
+  "version": "0.0.1",
+  "author": "naohito-T",
+  "description": "Nid backend.",
+  "license": "MIT",
+  "private": true,
+  "type": "commonjs",
+  "engineStrict": true,
+  "engines": {
+    "node": "^16.17.0",
+    "npm": "^8.15.0"
+  },
+  "scripts": {
+    "dev": "ts-node-dev -r tsconfig-paths/register src/index.ts",
+    "start": "ts-node -r tsconfig-paths/register src/index.ts",
+    "typeorm": "typeorm-ts-node-commonjs",
+    "migration:empty": "",
+    "migration": "typeorm-ts-node-commonjs migration:generate",
+    "format": "prettier -w './src/**/*.{js,ts,json}'",
+    "deploy": "sls deploy -r ap-northeast-1",
+    "remove": "sls remove -r ap-northeast-1"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.1231.0",
+    "body-parser": "^1.19.1",
+    "connect-dynamodb": "^2.0.5",
+    "cors": "^2.8.5",
+    "express": "^4.17.2",
+    "express-session": "^1.17.3",
+    "pg": "^8.4.0",
+    "reflect-metadata": "^0.1.13",
+    "typeorm": "0.3.10"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.12",
+    "@types/express": "^4.17.14",
+    "@types/express-session": "^1.17.5",
+    "@types/node": "^16.11.10",
+    "prettier": "^2.7.1",
+    "serverless": "^3.22.0",
+    "serverless-dynamodb-local": "^0.2.40",
+    "ts-node": "10.7.0",
+    "ts-node-dev": "^2.0.0",
+    "tsconfig-paths": "^4.1.0",
+    "typescript": "4.5.2"
+  }
 }

@@ -12,7 +12,7 @@ app
   .then((_) => {
     app.getApp.listen(3100, () => {
       console.log(
-        'Express server has Started!!! on port 3100. Open http://localhost:3100/users to see results',
+        'Express server has Started!!! on port 3100. Open http://localhost:3100/v1/users to see results',
       );
     });
   })

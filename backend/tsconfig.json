@@ -13,7 +13,7 @@
       // https://numb86-tech.hatenablog.com/entry/2020/07/11/160159
       "esModuleInterop": true,
       "sourceMap": true,
-      "typeRoots": ["node_modules/@types", "src/@types"],
+      "typeRoots": ["node_modules/@types"],
       "baseUrl": "./",
       "outDir": "./build",
       "paths": {
