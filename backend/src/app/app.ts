@@ -1,12 +1,16 @@
 import express from 'express';
 import * as bodyParser from 'body-parser';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import { Request, Response } from 'express';
 import { AppDataSource, AppTestDataSource } from '@/db/setting/db.setting';
 import { Routes } from '@/routers';
 import { User } from '@/db/entity/User';
-import { corsOptions } from '@/libs/cors';
+import { corsOptions } from '@/middleware/cors';
+import { setupSession } from '@/middleware/session';
 import { guestRouter } from '@/routers';
+
+import { commonVersionPath } from '@/configs';
 
 export class Application {
   private app: express.Express;
@@ -51,7 +55,7 @@ export class Application {
     //     }
     //   });
     // });
-    this.app.use('/v1', guestRouter());
+    this.app.use(commonVersionPath, guestRouter());
   };
 
   /**
@@ -60,8 +64,14 @@ export class Application {
   private launchApp = async () => {
     // cors
     this.app.use(cors(corsOptions));
-    // post対応
-    this.app.use(bodyParser.json());
+    // post対応（json parser）
+    this.app.use(express.json());
+    // this.app.use(bodyParser.json());
+    // session
+    this.app.use(setupSession());
+    // Parse Cookie
+    this.app.use(cookieParser());
+
     // register express routes from defined application routes
     await this.setupRouter();
 

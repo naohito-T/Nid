@@ -1,4 +1,4 @@
-export const commonVersionPath = 'v1';
+export const commonVersionPath = '/v1';
 
 export const GuestEndpoints = {};
 

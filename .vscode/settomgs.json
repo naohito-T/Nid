@@ -1,11 +1,6 @@
 {
-    "typescript.format.enable": false,
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "eslint.workingDirectories": [{ "mode": "auto" }],
-    "editor.formatOnSave": true,
-    "editor.formatOnType": true,
-    "editor.formatOnPaste": true,
-    "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": true
-    }
+  "typescript.format.enable": false,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "eslint.workingDirectories": [{ "mode": "auto" }],
+  "editor.formatOnSave": true
 }

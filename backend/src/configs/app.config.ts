@@ -8,6 +8,9 @@ export class AppConfig {
 }
 
 export const AWSSettings = {
-  region: AppConfig.getRunEnv === Environment.Local ? 'localhost' : '',
-  endpoint: AppConfig.getRunEnv === Environment.Local ? 'http://localhost:4566' : '',
+  accessKeyId: AppConfig.getRunEnv === Environment.Local ? process.env.AWS_ACCESS_KEY_ID : '',
+  secretAccessKey:
+    AppConfig.getRunEnv === Environment.Local ? process.env.AWS_SECRET_ACCESS_KEY : '',
+  region: AppConfig.getRunEnv === Environment.Local ? process.env.AWS_DEFAULT_REGION : '',
+  endpoint: AppConfig.getRunEnv === Environment.Local ? process.env.LOCAL_STACK_ENDPOINT : '',
 };

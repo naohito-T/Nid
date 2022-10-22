@@ -41,7 +41,6 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-
   aws:
     platform: linux/amd64
     image: localstack/localstack:0.14.4

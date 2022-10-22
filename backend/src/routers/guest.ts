@@ -22,6 +22,28 @@ export const guestRouter = (): Router => {
     res.send(ress);
   };
 
+  router.get('/test', (req, res) => {
+    // @ts-ignore
+    if (!req.session.views) {
+      // @ts-ignore
+      req.session.views = 0;
+    }
+    // カウントアップ
+    // @ts-ignore
+    req.session.views++;
+    // アクセス回数を表示
+    console.log('heell');
+    // @ts-ignore
+    res.send('Hello World! Count:' + req.session.views);
+  });
+
+  router.get('/logout', (req, res) => {
+    // セッションを破棄
+    req.session.destroy((err) => {
+      res.send('logout');
+    });
+  });
+
   router.get(UserEndpoints.users, a);
 
   return router;
