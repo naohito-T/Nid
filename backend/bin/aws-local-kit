@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+set -eu pipefail
+
+# ----------------------------
+# AWS launch Scripts For Local
+# ----------------------------
+
+initDynamoDB() {
+    # @see dynamo ref https://docs.aws.amazon.com/cli/latest/reference/dynamodb/create-table.html
+    local TABLE_NAME="auth-session"
+
+    aws --endpoint-url="${LOCAL_STACK_ENDPOINT}" \
+    dynamodb create-table \
+    --table-name "${TABLE_NAME}" \
+    --attribute-definitions AttributeName=session-id,AttributeType=S \
+    --key-schema AttributeName=session-id,KeyType=HASH \
+    --provisioned-throughput ReadCapacityUnits=1,WriteCapacityUnits=1
+}
+
+
+# log load
+. ./bin/info
+
+# &&だと失敗した時点で止まるため便利
+info 'Start AWS Local kits.' \
+&& info 'AWS Version.' \
+&& aws --version \
+&& info 'DynamoDB initialized.' \
+&& initDynamoDB

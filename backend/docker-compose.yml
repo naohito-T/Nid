@@ -6,19 +6,22 @@ services:
   # watchでstartする
   app:
     build:
-      context: .
-      dockerfile: docker/Dockerfile.local
+      context: $PWD
+      dockerfile: $PWD/docker/Dockerfile.local
+    # For M1 only. other environments comment out.
+    platform: linux/amd64
     ports:
-      - 3100:3100
+      - "3100:3100"
     volumes:
       - .:/app:cached
-    env_file: ./env/.env
+    env_file: $PWD/env/local/.env
     depends_on:
+      # @see https://gotohayato.com/content/533/
       db:
         condition: service_healthy
       aws:
         condition: service_healthy
-    command: yarn dev
+    command: ["bash", "-c", "./bin/runner"]
   db:
     image: postgres:12
     ports:
@@ -38,13 +41,11 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-  
   aws:
     platform: linux/amd64
     image: localstack/localstack:0.14.4
     ports:
-      - ${LOCALSTACK_PORT-24566}:4566 # すべてのサービスポート
-      - 8000:8080 # dashboard
+      - "24566:4566" # すべてのサービスポート
     volumes:
       # データのマウント
       - 'localstack-data:/tmp/localstack'
@@ -55,6 +56,12 @@ services:
       USE_LIGHT_IMAGE: 1
       SKIP_INFRA_DOWNLOADS: 1
       START_WEB: 0
+    healthcheck:
+      # init スクリプトが完了する前に app が起動しないよう ヘルスチェックする（自分だからportは4566）
+      test: ["CMD-SHELL", "curl http://localhost:4566/health | grep '\"initScripts\": \"initialized\"'"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
   # TODO 以下の記入について調べる（おそらく作成するだけでいい場合の最低構文）

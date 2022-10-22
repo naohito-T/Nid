@@ -1,18 +1,30 @@
-###################
+# ---------------------------
 # BUILD FOR LOCAL DEVELOPMENT
-###################
+# ---------------------------
 
+# memo
+# localのみ使用のためdocker-compoesからバインドマウントしてもらう
+# Dockerfile内でソースコード一式をbuild時にimageに含めると、ソースコードの反映がされないため注意。
+
+# memo storage
+# awsコマンドをinstallする（これで400MBぐらい増える...）820MB:2022/10/10
+# awsコマンドをマルチステージングにした 721MB
 FROM node:16.17.0-slim
-ENV NODE_ENV development
 
 WORKDIR /app
 
+ENV NODE_ENV local
+
+RUN apt update -qqy \
+  && apt upgrade -qqy \
+  && apt install -qqy ca-certificates sudo less unzip curl \
+  && sudo curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
+  && sudo unzip awscliv2.zip \
+  && sudo ./aws/install -i /usr/local/aws-cli -b /usr/bin \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/*
+
 COPY package.json yarn.lock ./
-# --frozen-lockfileフラグを付けるとyarn.lockが更新されず、パッケージの更新が必要な場合は失敗するようになるのでこちらも付けておきます
+
+# --frozen-lockfileフラグを付けるとyarn.lockが更新されず、パッケージの更新が必要な場合は失敗するようになる
 RUN yarn install --frozen-lockfile
-
-COPY . .
-
-CMD "yarn" "start"
-
-

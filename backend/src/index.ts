@@ -1,60 +1,19 @@
-import express from 'express';
-import * as bodyParser from 'body-parser';
-import cors from 'cors';
-import { Request, Response } from 'express';
-import { AppDataSource } from '@/db/setting/db.setting';
-import { Routes } from './routes/routes';
-import { User } from '@/db/entity/User';
-import { corsOptions } from '@/configs';
+import { Application } from '@/app';
+import { Environment, runtimeEnv } from '@/configs';
 
-AppDataSource.initialize()
-  .then(async () => {
-    // create express app
-    const app = express();
-    app.use(cors(corsOptions));
-    app.use(bodyParser.json());
-
-    // register express routes from defined application routes
-    Routes.forEach((route) => {
-      app[route.method](route.route, (req: Request, res: Response, next: Function) => {
-        const result = new (route.controller as any)()[route.action](req, res, next);
-        if (result instanceof Promise) {
-          result.then((result) =>
-            result !== null && result !== undefined ? res.send(result) : undefined,
-          );
-        } else if (result !== null && result !== undefined) {
-          res.json(result);
-        }
-      });
+// jestはdef testで起動する。
+const isTest = runtimeEnv() === Environment.Test;
+// DIの注入？（testの場合はtrueをアプリケーションに注入）
+// 注入することで以下ができる
+// - 起動したままjestでtestができる
+const app = new Application(isTest);
+app
+  .setup()
+  .then((_) => {
+    app.getApp.listen(3100, () => {
+      console.log(
+        'Express server has Started!!! on port 3100. Open http://localhost:3100/v1/users to see results',
+      );
     });
-
-    // setup express app here
-    // ...
-
-    // start express server
-    app.listen(3100);
-
-    // 分離した方がいい。
-
-    // insert new users for test
-    await AppDataSource.manager.save(
-      AppDataSource.manager.create(User, {
-        firstName: 'Timber',
-        lastName: 'Saw',
-        age: 27,
-      }),
-    );
-
-    await AppDataSource.manager.save(
-      AppDataSource.manager.create(User, {
-        firstName: 'Phantom',
-        lastName: 'Assassin',
-        age: 24,
-      }),
-    );
-
-    console.log(
-      'Express server has Started!!! on port 3100. Open http://localhost:3100/users to see results',
-    );
   })
-  .catch((error) => console.log(error));
+  .catch((e: unknown) => console.log(e));
