@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  openapi-ui:
+    image: swaggerapi/swagger-ui:latest
+    environment:
+      API_URL: openapi/openapi.yml
+    ports:
+      - "8000:8080"
+    volumes:
+      - ./doc/openapi:/usr/share/nginx/html/openapi
+
+  openapi-editor:
+    image: swaggerapi/swagger-editor:latest
+    environment:
+      SWAGGER_FILE: /usr/share/nginx/html/openapi/openapi.yml
+    ports:
+      - "8001:8080"
+    volumes:
+      - ./doc/openapi:/usr/share/nginx/html/openapi
+
+  openapi-mock:
+    image: stoplight/prism:3
+    command: mock -h 0.0.0.0 /openapi.yml
+    ports:
+      - "8002:4010"
+    volumes:
+      - ./doc/openapi/openapi.yml:/openapi.yml

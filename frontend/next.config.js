@@ -6,6 +6,15 @@ const nextConfig = {
   compiler: {
     styledComponents: true,
   },
+  async redirects() {
+    return [
+      {
+        source: '/user',
+        destination: '/',
+        permanent: true, // 永続的なリダイレクトかのフラグ 永続的？
+      }
+    ]
+  }
 };
 
 module.exports = nextConfig;

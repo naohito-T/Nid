@@ -1,12 +1,39 @@
+import { runtimeEnv, Environment } from '@/configs';
+import Axios, { AxiosInstance } from 'axios';
 export class BackendBase {
-  private readonly baseUrl =
-    process.env.NODE_ENV === 'development' ? 'http://localhost:3100' : process.env.API_URL;
+  private readonly baseURL;
+  protected readonly axios;
+
+  constructor() {
+    console.log(`runtime ${runtimeEnv()}`);
+    console.log(`Environment.Local${Environment.Local}`);
+    this.baseURL =
+      runtimeEnv() === Environment.Local ? 'http://localhost:3100' : process.env.API_URL;
+    this.axios = this.createBaseAxios();
+  }
+
+  private createBaseAxios = (): AxiosInstance => {
+    return Axios.create({
+      baseURL: this.baseURL,
+      timeout: 3000, // 3秒/ms
+    });
+  };
+
+  /**
+   * @desc 通信が完了した後に入れたい処理
+   * @example cacheをheaderに入れるなど
+   */
+  private onFulfilled = () => {};
+
+  // Rejectedなどに関してはerror handするだけだから特になし。
 
   public get = async <T>(path: string): Promise<T> => {
-    console.log(`path${this.baseUrl}${path}`);
-    const res = await fetch(`${this.baseUrl}${path}`);
-    const json = await res.json();
+    console.log(`get path${this.baseURL}${path}`);
+    return this.axios.get<T>(path).then((r) => r.data);
+  };
 
-    return json;
+  public post = async <T, V>(path: string, payload: V): Promise<T> => {
+    console.log(`path${this.baseURL}${path}`);
+    return this.axios.post<T>(path, { data: payload }).then((r) => r.data);
   };
 }

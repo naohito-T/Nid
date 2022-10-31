@@ -1,9 +1,5 @@
 version: '3.8'
 services:
-  # appはコマンドでstartさせる
-  # dbをmigrationかける
-  # dbにseedを入れる
-  # watchでstartする
   app:
     build:
       context: $PWD
@@ -25,11 +21,12 @@ services:
   db:
     image: postgres:12
     ports:
-      - "5432:5432"
+      - "15432:5432"
+    # @see https://zenn.dev/re24_1986/articles/b76c3fd8f76aec
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: "test"
+      POSTGRES_DB: "nid"
       # これなかったら気になる。
       POSTGRES_INITDB_ARGS: '--encoding=UTF-8'
     volumes:
@@ -64,6 +61,5 @@ services:
       retries: 5
 
 volumes:
-  # TODO 以下の記入について調べる（おそらく作成するだけでいい場合の最低構文）
   db-data: {}
   localstack-data: {}

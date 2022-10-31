@@ -12,31 +12,62 @@
     "npm": "^8.15.0"
   },
   "scripts": {
+    "repl:db": "node --require ts-node/register/transpile-only --experimental-repl-await src/commands/db-repl",
+    "ts": "ts-node --transpile-only -r tsconfig-paths/register --files",
     "dev": "ts-node-dev -r tsconfig-paths/register src/index.ts",
     "start": "ts-node -r tsconfig-paths/register src/index.ts",
-    "typeorm": "typeorm-ts-node-commonjs",
-    "migration:empty": "",
-    "migration": "typeorm-ts-node-commonjs migration:generate",
+    "typeorm:cli": "typeorm-ts-node-commonjs",
+    "typeorm:local": "ts-node -r tsconfig-paths/register -T $(npm bin)/typeorm",
+
+    "c": "からのmigrationファイル成功",
+    "migration:create": "yarn typeorm:local migration:create src/db/migration/init --timestamp",
+
+    "d": "migration revert",
+    "migration:generate": "yarn typeorm:local migration:generate -d src/db/setting/db.setting.ts",
+
+    "migration:run": "yarn typeorm:local migration:run -d src/db/setting/db.setting.ts",
+
+    "migration:revert": "yarn typeorm:local migration:revert -d src/db/setting/db.setting.ts",
+
+    "drop": "migration成功（dropしないといけない時もある）",
+    "migration:drop": "yarn typeorm:local schema:drop -d src/db/setting/db.setting.ts",
+    "seed": "yarn ts src/command/seeder.ts",
+    "show": "yarn typeorm:local migration:show -d src/db/setting/db.setting.ts",
     "format": "prettier -w './src/**/*.{js,ts,json}'",
     "deploy": "sls deploy -r ap-northeast-1",
     "remove": "sls remove -r ap-northeast-1"
   },
+  "config": {
+    "alias": {
+      "tsnode": "ts-node -r tsconfig-paths/register -T",
+      "typeorm": "ts-node -r tsconfig-paths/register -T $(npm bin)/typeorm"
+    }
+  },
   "dependencies": {
     "aws-sdk": "^2.1231.0",
+    "bcrypt": "^5.1.0",
     "connect-dynamodb": "^2.0.5",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "express": "^4.17.2",
+    "express-pino-logger": "^7.0.0",
     "express-session": "^1.17.3",
+    "jsonwebtoken": "^8.5.1",
+    "passport": "^0.6.0",
     "pg": "^8.4.0",
+    "pino": "^8.7.0",
     "reflect-metadata": "^0.1.13",
     "typeorm": "0.3.10"
   },
   "devDependencies": {
+    "@faker-js/faker": "^7.6.0",
+    "@types/bcrypt": "^5.0.0",
     "@types/cors": "^2.8.12",
     "@types/express": "^4.17.14",
+    "@types/express-pino-logger": "^4.0.3",
     "@types/express-session": "^1.17.5",
     "@types/node": "^16.11.10",
+    "pino-pretty": "^9.1.1",
     "prettier": "^2.7.1",
     "serverless": "^3.22.0",
     "serverless-dynamodb-local": "^0.2.40",

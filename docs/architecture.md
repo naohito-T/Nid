@@ -30,6 +30,8 @@ validation
 ↓
 controller
 ↓
+services（リソース分け）
+↓
 domain/entities db接続処理
 ↓
 domain/models db接続処理終わったあとデータ格納

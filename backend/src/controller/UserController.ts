@@ -19,7 +19,7 @@ export class UserController {
 
   async remove(request: Request, response: Response, next: NextFunction) {
     let userToRemove = await this.userRepository.findOneBy({
-      id: request.params.id as unknown as number,
+      id: request.params.id as unknown as string,
     });
     await this.userRepository.remove(userToRemove);
   }
