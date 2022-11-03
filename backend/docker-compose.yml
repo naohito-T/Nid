@@ -6,6 +6,7 @@ services:
       dockerfile: $PWD/docker/Dockerfile.local
     # For M1 only. other environments comment out.
     platform: linux/amd64
+    working_dir: /app
     ports:
       - "3100:3100"
     volumes:

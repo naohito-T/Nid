@@ -8,6 +8,7 @@ albを理解するためのProject
 naohito-T Provides login functionality for client projects.
 
 ## Backend
+[ディレクトリ関連はこれにする](https://qiita.com/os1ma/items/286eeec028e30e27587d)
 
 serverless-frameworkにする。
 
@@ -17,6 +18,7 @@ serverless-frameworkにする。
 
 dddっぽく作ってるけど
 [参考URL](https://neos21.net/blog/2021/10/13-01.html)
+[バックエンドは※rを採用](https://zenn.dev/tatta/books/5096cb23126e64/viewer/b0ba7c)
 
 以下をやりたい。
 - localではdevとtestのdbを作成する
@@ -30,7 +32,7 @@ validation
 ↓
 controller
 ↓
-services（リソース分け）
+services（リソース分けする
 ↓
 domain/entities db接続処理
 ↓

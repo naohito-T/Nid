@@ -4,12 +4,12 @@ import cookieParser from 'cookie-parser';
 import { DataSource } from 'typeorm';
 import { Request, Response } from 'express';
 import { AppDataSource } from '@/db/setting/db.setting';
-import { Routes } from '@/routers';
+import { Routes } from '@/interfaces/routers';
 import { User, SexType } from '@/db/entity/User';
 import { corsOptions } from '@/middleware/cors';
 import { setupSession } from '@/middleware/session';
 import { setupLogger } from '@/middleware/logger';
-import { guestRouter } from '@/routers';
+import { guestRouter } from '@/interfaces/routers';
 
 import { commonVersionPath } from '@/configs';
 
@@ -87,7 +87,6 @@ export class Application {
         telephone_number: '03030303',
       }),
     );
-
     await this.ds.manager.save(
       this.ds.manager.create(User, {
         first_name: 'Phantom',

@@ -1,7 +1,7 @@
 import express from 'express';
 import type { Router } from 'express-serve-static-core';
 import { UserEndpoints } from '@/configs';
-import { UserController } from '@/controller/UserController';
+import { UserController } from '@/interfaces/controller/UserController';
 import { Request, Response, NextFunction } from 'express';
 
 export const guestRouter = (): Router => {

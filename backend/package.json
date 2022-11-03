@@ -16,23 +16,25 @@
     "ts": "ts-node --transpile-only -r tsconfig-paths/register --files",
     "dev": "ts-node-dev -r tsconfig-paths/register src/index.ts",
     "start": "ts-node -r tsconfig-paths/register src/index.ts",
-    "typeorm:cli": "typeorm-ts-node-commonjs",
-    "typeorm:local": "ts-node -r tsconfig-paths/register -T $(npm bin)/typeorm",
+
+    "orm:cli": "typeorm-ts-node-commonjs",
+    "orm:local": "ts-node -r tsconfig-paths/register -T $(npm bin)/typeorm",
 
     "c": "からのmigrationファイル成功",
-    "migration:create": "yarn typeorm:local migration:create src/db/migration/init --timestamp",
+    "m:c": "yarn orm:local migration:create src/db/migration/init --timestamp",
 
     "d": "migration revert",
-    "migration:generate": "yarn typeorm:local migration:generate -d src/db/setting/db.setting.ts",
+    "m:g": "yarn orm:local migration:generate -d src/db/setting/db.setting.ts",
 
-    "migration:run": "yarn typeorm:local migration:run -d src/db/setting/db.setting.ts",
+    "m:up": "yarn orm:local migration:run -d src/db/setting/db.setting.ts",
 
-    "migration:revert": "yarn typeorm:local migration:revert -d src/db/setting/db.setting.ts",
+    "m:down": "yarn orm:local migration:revert -d src/db/setting/db.setting.ts",
 
     "drop": "migration成功（dropしないといけない時もある）",
-    "migration:drop": "yarn typeorm:local schema:drop -d src/db/setting/db.setting.ts",
+    "m:drop": "yarn orm:local schema:drop -d src/db/setting/db.setting.ts",
+
     "seed": "yarn ts src/command/seeder.ts",
-    "show": "yarn typeorm:local migration:show -d src/db/setting/db.setting.ts",
+    "show": "yarn orm:local migration:show -d src/db/setting/db.setting.ts",
     "format": "prettier -w './src/**/*.{js,ts,json}'",
     "deploy": "sls deploy -r ap-northeast-1",
     "remove": "sls remove -r ap-northeast-1"

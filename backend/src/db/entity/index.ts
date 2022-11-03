@@ -1,7 +1,8 @@
 export * from './User';
 export * from './UserAddress';
 export * from './UserAuthentication';
-export * from './Role';
+export * from './Terms';
+export * from './_Role';
 
 /**
  * roleをまとめたグループが作れる

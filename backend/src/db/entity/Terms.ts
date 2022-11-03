@@ -15,18 +15,24 @@ const UserAddressComment = {
  */
 @Entity('terms')
 export class Terms extends BaseIProperties {
-  @CreateDateColumn({ type: 'timestamp', precision: 3, comment: UserAddressComment.version })
-  terms_version: Date;
+  @CreateDateColumn({
+    name: 'terms_version',
+    type: 'timestamp',
+    precision: 3, // これなんだっけ
+    nullable: true,
+    comment: UserAddressComment.version,
+  })
+  termsVersion: Date | null = null;
 
-  @Column()
-  readonly user_id: string;
+  @Column({ name: 'user_id' })
+  readonly userId: string;
   // @JoinColumnデコレーターはリレーションの一方の側でのみ使用する必要があることに注意してください。このデコレーターをどちら側に配置しても、関係の所有側になります。リレーションシップの所有側には、データベース内の外部キーを持つ列が含まれています。
-  @OneToOne(() => User, (user) => user.has_terms_version) // relationを表現してい
-  @JoinColumn({ name: 'user_id' }) // userIdがforeignキーとなることを表す。
+  @OneToOne(() => User, (user) => user.hasTermsVersion) // relationを表現している。
+  @JoinColumn({ name: 'userId' }) // userIdがforeignキーとなることを表す。
   user: User;
 
-  constructor(userId: string) {
-    super();
-    this.user_id = userId;
-  }
+  // constructor(userId: string) {
+  //   super();
+  //   this.user_id = userId;
+  // }
 }

@@ -18,31 +18,25 @@ const UserAddressComment = {
 // こちらに送付するみたいな
 @Entity('user_addresses')
 export class UserAddress extends BaseIProperties {
-  @Column({ comment: UserAddressComment.zip_code })
-  zip_code: string;
+  @Column({ name: 'zip_code', comment: UserAddressComment.zip_code })
+  zipCode: string;
 
-  @Column({ comment: UserAddressComment.prefecture })
+  @Column({ name: 'prefecture', comment: UserAddressComment.prefecture })
   prefecture: string;
 
-  @Column({ comment: UserAddressComment.city })
+  @Column({ name: 'city', comment: UserAddressComment.city })
   city: string;
 
-  @Column({ comment: UserAddressComment.street })
+  @Column({ name: 'street', comment: UserAddressComment.street })
   street: string;
 
-  @Column({ comment: UserAddressComment.building, nullable: true, default: null })
+  @Column({ name: 'building', comment: UserAddressComment.building, nullable: true, default: null })
   building: string | null;
 
-  @Column()
-  readonly user_id: string;
+  @Column({ name: 'user_id' })
+  readonly userId: string;
   // @JoinColumnデコレーターはリレーションの一方の側でのみ使用する必要があることに注意してください。このデコレーターをどちら側に配置しても、関係の所有側になります。リレーションシップの所有側には、データベース内の外部キーを持つ列が含まれています。
-  @ManyToOne(() => User, (user) => user.addresses) // relationを表現してい
-  @JoinColumn({ name: 'user_id' }) // userIdがforeignキーとなることを表す。
+  @ManyToOne(() => User, (user) => user.userAddress) // relationを表現してい
+  @JoinColumn({ name: 'userId' }) // userIdがforeignキーとなることを表す。
   user: User;
-
-  // 初期値のあるプロパティを除いてオブジェクトの不変条件を満たすためにconstructorを設定する。
-  constructor(userId: string) {
-    super();
-    this.user_id = userId;
-  }
 }

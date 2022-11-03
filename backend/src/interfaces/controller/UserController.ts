@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { User } from '../db/entity/User';
+import { User } from '../../db/entity/User';
 import { AppDataSource } from '@/db/setting/db.setting';
 
 export class UserController {

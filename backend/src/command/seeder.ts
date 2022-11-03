@@ -1,12 +1,12 @@
 import { AppDataSource } from '@/db/setting';
 import { DataSource, EntityManager } from 'typeorm';
-import { User, UserAddress, UserAuth, UserRole } from '@/db/entity';
+import { User, UserAddress, UserAuthentication, UserRole } from '@/db/entity';
 import { generateJaUser } from '@/__tests__/fixtures';
 
 type TasksSeederService = {
   user: User;
   userAddress: UserAddress;
-  userAuth: UserAuth;
+  userAuth: UserAuthentication;
   userRole: UserRole;
 };
 
@@ -40,9 +40,10 @@ export class Seeder {
 
   // SQLの TRUNCATE TABLEにあたる。
   async clearTables() {
-    // await this.setupDB();
     // TODO 繰り返しにする。
-    if (this.isInitialized) this.ds.manager.clear(User);
+    if (this.isInitialized) {
+      this.ds.manager.clear(User);
+    }
   }
 }
 
