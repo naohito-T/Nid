@@ -77,26 +77,26 @@ export class Application {
     // register express routes from defined application routes
     await this.setupRouter();
 
-    await this.ds.manager.save(
-      this.ds.manager.create(User, {
-        first_name: 'Timber',
-        last_name: 'Saw',
-        age: 27,
-        sex: SexType.female,
-        nick_name: 'a',
-        telephone_number: '03030303',
-      }),
-    );
-    await this.ds.manager.save(
-      this.ds.manager.create(User, {
-        first_name: 'Phantom',
-        last_name: 'Assassin',
-        age: 24,
-        sex: SexType.female,
-        nick_name: 'a',
-        telephone_number: '03030303',
-      }),
-    );
+    // await this.ds.manager.save(
+    //   this.ds.manager.create(User, {
+    //     first_name: 'Timber',
+    //     last_name: 'Saw',
+    //     age: 27,
+    //     sex: SexType.female,
+    //     nick_name: 'a',
+    //     telephone_number: '03030303',
+    //   }),
+    // );
+    // await this.ds.manager.save(
+    //   this.ds.manager.create(User, {
+    //     first_name: 'Phantom',
+    //     last_name: 'Assassin',
+    //     age: 24,
+    //     sex: SexType.female,
+    //     nick_name: 'a',
+    //     telephone_number: '03030303',
+    //   }),
+    // );
 
     /** 未定義API */
     this.app.use(async (_, res) => {

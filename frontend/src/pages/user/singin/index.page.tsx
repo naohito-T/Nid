@@ -19,12 +19,14 @@ const SingIn: NextPage = () => {
     console.log(`users ${users}`);
   };
 
+  const onLoginForEmail = (email: string, password: string) => {
+    console.log('email');
+  };
+
   return (
-    <>
-      <Wrapper>
-        <Button onClick={onClick}>SignIn</Button>
-      </Wrapper>
-    </>
+    <Wrapper>
+      <Button onClick={onClick}>SignIn</Button>
+    </Wrapper>
   );
 };
 

@@ -5,6 +5,7 @@ import { Button } from '@/components/atoms/button';
 import { User } from '@/@types/model';
 import { GuestResource } from '~/apis/resources/guest/backend.resource';
 import Link from 'next/link';
+import { Axios } from 'axios';
 
 const Wrapper = styled.div`
   ${displayFlex({})}
@@ -14,9 +15,9 @@ const Wrapper = styled.div`
 
 const Top: NextPage = () => {
   const onClick = async () => {
-    const guestResource = new GuestResource();
-    const users = await guestResource.getTest();
-    console.log(`users ${users}`);
+    // const guestResource = new GuestResource();
+    // const users = await guestResource.getTest();
+    // console.log(`users ${users}`);
   };
 
   return (

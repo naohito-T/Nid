@@ -2,6 +2,10 @@ import { NextFunction, Request, Response } from 'express';
 import { User } from '../../db/entity/User';
 import { AppDataSource } from '@/db/setting/db.setting';
 
+/**
+ * @desc controllerに渡す前にはバリデーションは完成している。
+ * ここからはサービスを呼びだす。
+ */
 export class UserController {
   private userRepository = AppDataSource.getRepository(User);
 

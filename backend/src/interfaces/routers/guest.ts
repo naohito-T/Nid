@@ -1,7 +1,7 @@
 import express from 'express';
 import type { Router } from 'express-serve-static-core';
 import { UserEndpoints } from '@/configs';
-import { UserController } from '@/interfaces/controller/UserController';
+import { GuestController } from '@/interfaces/controllers';
 import { Request, Response, NextFunction } from 'express';
 
 export const guestRouter = (): Router => {
@@ -15,12 +15,7 @@ export const guestRouter = (): Router => {
    * 3. バリデーション
    * 4. handlerに渡す。ここコントローラにする？
    */
-  const uc = new UserController();
-
-  const a = async (req: Request, res: Response, next: NextFunction) => {
-    const ress = await uc.all(req, res, next);
-    res.send(ress);
-  };
+  const gc = new GuestController();
 
   router.get('/test', (req, res) => {
     // @ts-ignore
@@ -44,7 +39,7 @@ export const guestRouter = (): Router => {
     });
   });
 
-  router.get(UserEndpoints.users, a);
+  router.get(UserEndpoints.users, gc.getUsers);
 
   return router;
 };

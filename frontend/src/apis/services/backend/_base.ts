@@ -6,9 +6,9 @@ export class BackendBase {
 
   constructor() {
     console.log(`runtime ${runtimeEnv()}`);
-    console.log(`Environment.Local${Environment.Local}`);
-    this.baseURL =
-      runtimeEnv() === Environment.Local ? 'http://localhost:3100' : process.env.API_URL;
+    console.log(`Environment.Local${Environment.Development}`);
+    // backendへの通信は全てproxyさせる。
+    this.baseURL = process.env.FRONT_URL;
     this.axios = this.createBaseAxios();
   }
 
@@ -16,6 +16,10 @@ export class BackendBase {
     return Axios.create({
       baseURL: this.baseURL,
       timeout: 3000, // 3秒/ms
+      responseType: 'json',
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
   };
 

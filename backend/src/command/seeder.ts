@@ -12,11 +12,15 @@ type TasksSeederService = {
 
 const TasksSeeds = [];
 
+/**
+ * @desc localとtestで分けるseeder
+ */
 export class Seeder {
   // connection作成
   private readonly tasksSeederService: TasksSeederService;
   private ds: DataSource;
   private isInitialized: boolean;
+  private env: 'development' | 'test';
 
   async SeederStart() {
     try {
