@@ -22,12 +22,14 @@ import { runtimeEnv, Environment } from '@/configs';
 const logger =
   runtimeEnv() === Environment.Development
     ? pino({
+        name: 'nid-frontend',
         level: 'debug',
         transport: {
           target: 'pino-pretty',
         },
       })
     : pino({
+        name: 'nid-frontend',
         level: 'info',
         // TODO 出力先考える
         transport: {
@@ -59,3 +61,8 @@ export const eventLogger = logger.child({ target: 'event' });
  * @desc Log for message
  */
 export const messageLogger = logger.child({ target: 'message' });
+
+/**
+ * @desc Log for error
+ */
+export const errorLogger = logger.child({ target: 'error' });

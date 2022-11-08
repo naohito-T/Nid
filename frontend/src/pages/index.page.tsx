@@ -1,16 +1,10 @@
-import type { InferGetServerSidePropsType, NextPage } from 'next';
+import type { NextPage } from 'next';
 import styled from 'styled-components';
-import { displayFlex } from '@/styles/styled-components';
-import { Button } from '@/components/atoms/button';
-import { User } from '@/@types/model';
-import { GuestResource } from '~/apis/resources/guest/backend.resource';
-import Link from 'next/link';
-import { Axios } from 'axios';
+import { TopTpl } from '@/components/templates';
 
-const Wrapper = styled.div`
-  ${displayFlex({})}
-  height: 100vh;
-  background-color: #fff;
+const Wrapper = styled.main`
+  max-width: 1280px;
+  width: 100%;
 `;
 
 const Top: NextPage = () => {
@@ -22,15 +16,7 @@ const Top: NextPage = () => {
 
   return (
     <Wrapper>
-      <Button onClick={onClick}>API接続</Button>
-      {/* 新規作成 */}
-      <Link href={'/user/sing-up'} passHref>
-        <p className='text'>Sing-up</p>
-      </Link>
-      {/* ログイン */}
-      <Link href={'/user/sing-in'} passHref>
-        <p className='text'>Sing-up</p>
-      </Link>
+      <TopTpl />
     </Wrapper>
   );
 };
