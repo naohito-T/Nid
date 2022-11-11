@@ -1,21 +1,37 @@
-import { runtimeEnv, Environment } from '@/configs';
 import Axios, { AxiosInstance } from 'axios';
 import { Result, Success, Failure, ErrorResponse } from '@/libs/error';
-import { fetchLogger } from '@/middleware/log';
+import { fetchLogger, errorLogger } from '@/middleware/log';
 export class BackendBase {
   private readonly baseURL;
   private readonly axios;
 
   constructor() {
-    console.log(`runtime ${runtimeEnv()}`);
-    console.log(`Environment.Local${Environment.Development}`);
-    // backendへの通信は全てproxyさせる。
+    // TODO backendへの通信は全てproxyさせるかは要検討
     this.baseURL = process.env.FRONT_URL;
     this.axios = this.createBaseAxios();
   }
 
+  /**
+   * @desc 通信が完了した後に入れたい処理
+   */
+  private onFulfilled = () => {};
+
+  /**
+   * @desc 通信が失敗した後に入れたい処理
+   */
+  private onRejected = () => {};
+
+  /**
+   * @desc 通信が失敗した場合にリトライさせ、countを1つあげる
+   */
+  private fetchRetry = async (count: number): Promise<number> => {
+    await new Promise((r) => setTimeout(r, 50000));
+    fetchLogger.info({ msg: 'retry', count });
+    return ++count;
+  };
+
   private createBaseAxios = (): AxiosInstance => {
-    return Axios.create({
+    const axios = Axios.create({
       baseURL: this.baseURL,
       timeout: 3000, // 3秒/ms
       responseType: 'json',
@@ -23,24 +39,51 @@ export class BackendBase {
         'Content-Type': 'application/json',
       },
     });
+
+    // requestの時にinterceptしたい時
+    // axios.interceptors.request.use()
+    // responseの時にinterceptしたい時
+    // axios.interceptors.response.use()
+    return axios;
   };
 
   /**
-   * @desc 通信が完了した後に入れたい処理
-   * @example cacheをheaderに入れるなど
-   * @todo とりあえず一旦はlogを入れるか
+   * @desc Errorハンドリング＆リトライを備えたGET ユーティリティメソッド
+   * @param path
+   * @param headers
+   * @param retry default retry count
    */
-  private onFulfilled = () => {};
-
-  // Rejectedなどに関してはerror handするだけだから特になし。
-
-  public get = async <T>(path: string, headers?: object): Promise<T> => {
-    console.log(`get path${this.baseURL}${path}`);
-    return this.axios.get<T>(path, { headers }).then((r) => r.data);
+  public get = async <T>(
+    path: string,
+    headers?: object,
+    retry: number = 3,
+  ): Promise<Result<Awaited<Promise<T>>, ErrorResponse>> => {
+    let count = 0;
+    try {
+      const data = await this.axios.get<T>(path, { headers }).then((r) => r.data);
+      fetchLogger.info({ msg: 'Post Success', file: 'backend base' });
+      return new Success(data);
+    } catch (e: unknown) {
+      fetchLogger.info({ msg: 'Post Error', file: 'backend base' });
+      if (Axios.isAxiosError(e)) {
+        if (count === retry) {
+          return new Failure(new ErrorResponse('backend base', e.status, e.code, e));
+        }
+        // ネットワークエラー時はerrorのオブジェクトの中にそもそもオブジェクトで返ってこないためリトライさせる。
+        if (!e.response) {
+          count = await this.fetchRetry(count);
+          await this.axios.get<T>(path, { headers }).then((r) => r.data);
+        } else {
+          return new Failure(new ErrorResponse('backend base', e.status, e.code, e));
+        }
+      }
+      // 予期せぬエラー
+      return new Failure(new ErrorResponse('backend base', undefined, undefined, e as Error));
+    }
   };
 
   /**
-   * @desc Errorハンドリング＆リトライを備えたpostユーティリティメソッド
+   * @desc Errorハンドリング＆リトライを備えたPOST ユーティリティメソッド
    * @param path
    * @param payload
    * @param retry default retry count
@@ -50,7 +93,6 @@ export class BackendBase {
     payload: V,
     retry: number = 3,
   ): Promise<Result<Awaited<Promise<T>>, ErrorResponse>> => {
-    fetchLogger.info({ msg: 'Post Start', file: 'backend base' });
     let count = 0;
     try {
       const data = await this.axios.post<T>(path, { data: payload }).then((r) => r.data);
@@ -62,11 +104,9 @@ export class BackendBase {
         if (count === retry) {
           return new Failure(new ErrorResponse('backend base', e.status, e.code, e));
         }
-        // ネットワークエラーの場合はerrorのオブジェクトの中にそもそもオブジェクトで返ってこないためリトライさせる。
+        // ネットワークエラー時はerrorのオブジェクトの中にそもそもオブジェクトで返ってこないためリトライさせる。
         if (!e.response) {
-          ++count;
-          await new Promise((r) => setTimeout(r, 50000));
-          fetchLogger.info({ msg: 'retry', count });
+          count = await this.fetchRetry(count);
           await this.axios.post<T>(path, { data: payload }).then((r) => r.data);
         } else {
           return new Failure(new ErrorResponse('backend base', e.status, e.code, e));
@@ -75,5 +115,16 @@ export class BackendBase {
       // 予期せぬエラー
       return new Failure(new ErrorResponse('backend base', undefined, undefined, e as Error));
     }
+  };
+
+  /**
+   * @desc GuestResource ユーティリティ Logs（ここにdatadog or sentry）
+   */
+  protected interceptLogs = (functionName: string, statusCode: number, code: string) => {
+    errorLogger.error({
+      functionName,
+      statusCode,
+      code,
+    });
   };
 }
