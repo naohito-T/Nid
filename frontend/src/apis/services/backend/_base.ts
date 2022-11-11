@@ -1,5 +1,7 @@
 import { runtimeEnv, Environment } from '@/configs';
 import Axios, { AxiosInstance } from 'axios';
+import { Result, Success, Failure, ErrorResponse } from '@/libs/error';
+import { fetchLogger } from '@/middleware/log';
 export class BackendBase {
   private readonly baseURL;
   private readonly axios;
@@ -37,8 +39,41 @@ export class BackendBase {
     return this.axios.get<T>(path, { headers }).then((r) => r.data);
   };
 
-  public post = async <T, V>(path: string, payload: V): Promise<T> => {
-    console.log(`path${this.baseURL}${path}`);
-    return this.axios.post<T>(path, { data: payload }).then((r) => r.data);
+  /**
+   * @desc Errorハンドリング＆リトライを備えたpostユーティリティメソッド
+   * @param path
+   * @param payload
+   * @param retry default retry count
+   */
+  public post = async <T, V>(
+    path: string,
+    payload: V,
+    retry: number = 3,
+  ): Promise<Result<Awaited<Promise<T>>, ErrorResponse>> => {
+    fetchLogger.info({ msg: 'Post Start', file: 'backend base' });
+    let count = 0;
+    try {
+      const data = await this.axios.post<T>(path, { data: payload }).then((r) => r.data);
+      fetchLogger.info({ msg: 'Post Success', file: 'backend base' });
+      return new Success(data);
+    } catch (e: unknown) {
+      fetchLogger.info({ msg: 'Post Error', file: 'backend base' });
+      if (Axios.isAxiosError(e)) {
+        if (count === retry) {
+          return new Failure(new ErrorResponse('backend base', e.status, e.code, e));
+        }
+        // ネットワークエラーの場合はerrorのオブジェクトの中にそもそもオブジェクトで返ってこないためリトライさせる。
+        if (!e.response) {
+          ++count;
+          await new Promise((r) => setTimeout(r, 50000));
+          fetchLogger.info({ msg: 'retry', count });
+          await this.axios.post<T>(path, { data: payload }).then((r) => r.data);
+        } else {
+          return new Failure(new ErrorResponse('backend base', e.status, e.code, e));
+        }
+      }
+      // 予期せぬエラー
+      return new Failure(new ErrorResponse('backend base', undefined, undefined, e as Error));
+    }
   };
 }

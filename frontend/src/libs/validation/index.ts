@@ -1,6 +1,6 @@
 import type { extname } from 'path';
 import { z, ZodError } from 'zod';
-import type { User } from '~/schema';
+// import type { User } from '~/schema';
 import { UserSchema } from '~/schema';
 
 // ノイズを削除したり（空白・HTML）
@@ -53,10 +53,10 @@ try {
 /**
  * @desc validationと整形が組み合わさっているものをwrapし検証するmethod
  */
-const checkValidation = <V>(value: V): V => {
-  try {
-    return value.parse();
-  } catch (e: unknown) {
-    throw new Error('validation error');
-  }
-};
+// const checkValidation = <V>(value: V): V => {
+//   try {
+//     return value.parse();
+//   } catch (e: unknown) {
+//     throw new Error('validation error');
+//   }
+// };

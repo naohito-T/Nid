@@ -11,6 +11,7 @@
   },
   "scripts": {
     "dev": "FORCE_COLOR=true next dev -p 2100 | pino-pretty -tc",
+    "tsc": "tsc --noEmit",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",

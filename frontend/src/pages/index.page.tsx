@@ -14,6 +14,7 @@ const Wrapper = styled.main`
 // 期限が切れていなかったらlogin
 // 期限が切れていたら再度loginを伝える。
 export const getServerSideProps = async () => {
+  window.alert('Hello');
   return {
     props: {},
   };
@@ -22,10 +23,10 @@ export const getServerSideProps = async () => {
 const Top: NextPage = () => {
   const onSubmit = async (singValue: SingValueType) => {
     // validationをして
-    // const backendGuestResource = new BackendGuestResource();
-    // const users = await backendGuestResource.singIn(singValue);
+    const backendGuestResource = new BackendGuestResource();
+    const users = await backendGuestResource.signIn(singValue);
     // TODO useState or Recoil
-    // console.log(`users ${users}`);
+    console.log(`users ${users}`);
   };
 
   return (

@@ -5,10 +5,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import type { SingValueType } from '@/schema';
 import { SingValueScheme } from '@/schema';
 
-import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
@@ -30,7 +28,7 @@ const Wrapper = styled.section`
   width: 100%;
 `;
 
-export const SingIn: NextComponentType<NextPageContext, null, Props> = ({}) => {
+export const SingIn: NextComponentType<NextPageContext, null, Props> = ({ onSubmit }) => {
   const {
     register,
     handleSubmit,
@@ -39,7 +37,7 @@ export const SingIn: NextComponentType<NextPageContext, null, Props> = ({}) => {
     resolver: zodResolver(SingValueScheme),
   });
 
-  const onSubmit: SubmitHandler<SingValueType> = (data) => console.log(data);
+  // const onSubmit: SubmitHandler<SingValueType> = (data) => console.log(data);
   const errorEmail = errors.email?.message as string;
   const errorPassword = errors.password?.message as string;
 
@@ -104,7 +102,6 @@ export const SingIn: NextComponentType<NextPageContext, null, Props> = ({}) => {
         </Box>
       </Box> */}
       <Grid container component='main' sx={{ height: '100vh' }}>
-        <CssBaseline />
         <Grid
           item
           xs={false}
@@ -142,19 +139,19 @@ export const SingIn: NextComponentType<NextPageContext, null, Props> = ({}) => {
                 fullWidth
                 id='email'
                 label='Email Address'
-                name='email'
                 autoComplete='email'
                 autoFocus
+                {...register('email')}
               />
               <TextField
                 margin='normal'
                 required
                 fullWidth
-                name='password'
                 label='Password'
                 type='password'
                 id='password'
                 autoComplete='current-password'
+                {...register('password')}
               />
               <FormControlLabel
                 control={<Checkbox value='remember' color='primary' />}

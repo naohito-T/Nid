@@ -10,10 +10,11 @@ const Wrapper = styled.div``;
 const SingIn: NextPage = () => {
   const onSubmit = async (singValue: SingValueType) => {
     // validationをして
-    // const backendGuestResource = new BackendGuestResource();
-    // const users = await backendGuestResource.singIn(singValue);
+    const backendGuestResource = new BackendGuestResource();
+    console.log(`users`);
+    const users = await backendGuestResource.signIn(singValue);
     // TODO useState or Recoil
-    // console.log(`users ${users}`);
+    console.log(`users ${users}`);
   };
 
   return (

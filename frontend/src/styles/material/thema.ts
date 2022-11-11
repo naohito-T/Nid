@@ -1,11 +1,12 @@
-import { createTheme } from '@mui/material';
+export {};
+// import { createTheme } from '@mui/material';
 
-const paletteModes = ['light', 'dark'];
-/**
- * @desc defaultのテーマを上書きする。
- */
-export const theme = createTheme({
-  palette: {
-    mode: paletteMode,
-  },
-});
+// const paletteModes = ['light', 'dark'];
+// /**
+//  * @desc defaultのテーマを上書きする。
+//  */
+// export const theme = createTheme({
+//   palette: {
+//     mode: paletteMode,
+//   },
+// });
