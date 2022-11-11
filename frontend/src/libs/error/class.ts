@@ -6,7 +6,7 @@ import { errorLogger } from '@/middleware/log';
 
 class AppError extends Error {
   constructor(e: Error, msg: string) {
-    super(e, msg);
+    super(msg);
     // TODO filename取れるか？
     errorLogger.error({ msg, file: __filename });
     // sentryも記載。
@@ -68,6 +68,15 @@ export class UnknownError extends Error {
 
   exec() {
     throw new UnknownError();
+  }
+}
+
+/**
+ * @desc validation error（zodで使用するかも）
+ */
+export class ValidationError extends AppError {
+  constructor() {
+    super();
   }
 }
 

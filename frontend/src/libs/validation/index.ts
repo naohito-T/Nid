@@ -1,6 +1,7 @@
+import type { extname } from 'path';
 import { z, ZodError } from 'zod';
-import type { User } from '@/libs/validation/schema';
-import { UserSchema } from '@/libs/validation/schema';
+import type { User } from '~/schema';
+import { UserSchema } from '~/schema';
 
 // ノイズを削除したり（空白・HTML）
 // validationしてシリアライズ化する。
@@ -29,9 +30,9 @@ try {
   */
 }
 
-export const validationSingUp = (user: User) => {
-  UserSchema.parse();
-};
+// export const validationSingUp = (user: User) => {
+//   UserSchema.parse();
+// };
 
 /**
  * @desc validationした後、整形する。
@@ -48,3 +49,14 @@ export const validationSingUp = (user: User) => {
 //       ...t,
 //     };
 //   });
+
+/**
+ * @desc validationと整形が組み合わさっているものをwrapし検証するmethod
+ */
+const checkValidation = <V>(value: V): V => {
+  try {
+    return value.parse();
+  } catch (e: unknown) {
+    throw new Error('validation error');
+  }
+};

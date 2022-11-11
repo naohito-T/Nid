@@ -2,10 +2,11 @@ import { useEffect, useState } from 'react';
 import { createTheme, PaletteMode, useMediaQuery } from '@mui/material';
 
 export const useApp = () => {
-  const paletteModes = ['light', 'dark'];
   const paletteModeStorageKey = 'palette_mode';
   const prefersPaletteMode = useMediaQuery('(prefers-color-scheme: dark)') ? 'dark' : 'light';
+  // checkをしたか（checkがdark）
   const [paletteMode, setPaletteMode] = useState<PaletteMode>(prefersPaletteMode);
+  // check（true）が入りdark modeとみなす
   const [isDarkMode, setIsDarkMode] = useState(paletteMode === 'dark');
 
   const theme = createTheme({

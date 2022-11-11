@@ -17,4 +17,4 @@ export const UserSchema = z.object({
     .max(32, { message: 'Max 32' }),
 });
 
-export type User = z.infer<typeof UserSchema>;
+export type UserType = z.infer<typeof UserSchema>;

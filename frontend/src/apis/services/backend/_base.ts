@@ -2,7 +2,7 @@ import { runtimeEnv, Environment } from '@/configs';
 import Axios, { AxiosInstance } from 'axios';
 export class BackendBase {
   private readonly baseURL;
-  protected readonly axios;
+  private readonly axios;
 
   constructor() {
     console.log(`runtime ${runtimeEnv()}`);
@@ -26,14 +26,15 @@ export class BackendBase {
   /**
    * @desc 通信が完了した後に入れたい処理
    * @example cacheをheaderに入れるなど
+   * @todo とりあえず一旦はlogを入れるか
    */
   private onFulfilled = () => {};
 
   // Rejectedなどに関してはerror handするだけだから特になし。
 
-  public get = async <T>(path: string): Promise<T> => {
+  public get = async <T>(path: string, headers?: object): Promise<T> => {
     console.log(`get path${this.baseURL}${path}`);
-    return this.axios.get<T>(path).then((r) => r.data);
+    return this.axios.get<T>(path, { headers }).then((r) => r.data);
   };
 
   public post = async <T, V>(path: string, payload: V): Promise<T> => {

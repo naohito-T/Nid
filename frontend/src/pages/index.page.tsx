@@ -1,22 +1,36 @@
 import type { NextPage } from 'next';
 import styled from 'styled-components';
 import { TopTpl } from '@/components/templates';
+import { BackendGuestResource } from '@/apis/resources/guest/backend.resource';
+import type { SingValueType } from '@/schema';
 
 const Wrapper = styled.main`
-  max-width: 1280px;
   width: 100%;
 `;
 
+// loginかチェックする
+// 方針としてloginとみなす（recoilに値があれば）
+// expiredを見て
+// 期限が切れていなかったらlogin
+// 期限が切れていたら再度loginを伝える。
+export const getServerSideProps = async () => {
+  return {
+    props: {},
+  };
+};
+
 const Top: NextPage = () => {
-  const onClick = async () => {
-    // const guestResource = new GuestResource();
-    // const users = await guestResource.getTest();
+  const onSubmit = async (singValue: SingValueType) => {
+    // validationをして
+    // const backendGuestResource = new BackendGuestResource();
+    // const users = await backendGuestResource.singIn(singValue);
+    // TODO useState or Recoil
     // console.log(`users ${users}`);
   };
 
   return (
     <Wrapper>
-      <TopTpl />
+      <TopTpl onSubmit={onSubmit} />
     </Wrapper>
   );
 };
