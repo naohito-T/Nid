@@ -7,10 +7,23 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { useApp } from '@/hooks';
 import { messageLogger } from '@/middleware/log';
 import { RecoilRoot } from 'recoil';
+// import Error from 'next/error';
+// import {} from './_errro.page';
 
-const App = ({ Component, pageProps }: AppProps) => {
-  messageLogger.debug({ msg: `Started App ${process.env.NODE_ENV}`, file: __filename });
+type PageProps = {
+  error: {
+    statusCode: number;
+    message: string;
+  };
+};
+
+const App = ({ Component, pageProps }: AppProps<PageProps>) => {
   const { theme, isDarkMode, handleChangePaletteMode } = useApp();
+  // if (pageProps.error) {
+  //   return <Error statusCode={pageProps.error.statusCode} title={pageProps.error.message} />;
+  // }
+
+  messageLogger.debug({ msg: `Started App ${process.env.NODE_ENV}`, file: __filename });
 
   return (
     <RecoilRoot>

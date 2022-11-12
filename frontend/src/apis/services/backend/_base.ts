@@ -7,7 +7,8 @@ export class BackendBase {
 
   constructor() {
     // TODO backendへの通信は全てproxyさせるかは要検討
-    this.baseURL = process.env.FRONT_URL;
+    // this.baseURL = process.env.FRONT_URL;
+    this.baseURL = process.env.BACKEND_API_URL;
     this.axios = this.createBaseAxios();
   }
 
@@ -53,7 +54,7 @@ export class BackendBase {
    * @param headers
    * @param retry default retry count
    */
-  public get = async <T>(
+  protected get = async <T>(
     path: string,
     headers?: object,
     retry: number = 3,
@@ -88,7 +89,7 @@ export class BackendBase {
    * @param payload
    * @param retry default retry count
    */
-  public post = async <T, V>(
+  protected post = async <T, V>(
     path: string,
     payload: V,
     retry: number = 3,

@@ -1,4 +1,5 @@
-import type { InferGetServerSidePropsType, NextPage } from 'next';
+import type { NextPage, InferGetServerSidePropsType } from 'next';
+import Error from 'next/error';
 import styled from 'styled-components';
 import { SignUpTpl } from '@/components/templates';
 import { displayFlex } from '@/styles/styled-components';
@@ -10,8 +11,26 @@ const Wrapper = styled.div`
   height: 100vh;
   background-color: #000; */
 `;
+export const getServerSideProps = async () => {
+  let statusCode: number | null = null;
+  /**
+   * @memo window.alert('Hello'); ここでnullアクセスも（500）
+   * throw new Error('status'); 500へ遷移（しかしmessageはとどかない）
+   */
+  // const backendGuestResource = new BackendGuestResource();
+  // ここの中でerrorがfetchされたらerrorページへ飛ばされる。
+  // const users = await backendGuestResource.signIn({ email: '', password: '' });
 
-const SingUp: NextPage = () => {
+  return {
+    props: {
+      statusCode,
+    },
+  };
+};
+
+type Props = InferGetServerSidePropsType<typeof getServerSideProps>;
+
+const SingUp: NextPage<Props> = ({ statusCode }) => {
   const onSubmit = async (singValue: SingValueType) => {
     // validationをして
     // const backendGuestResource = new BackendGuestResource();
@@ -21,9 +40,15 @@ const SingUp: NextPage = () => {
   };
 
   return (
-    <Wrapper>
-      <SignUpTpl onSubmit={onSubmit} />
-    </Wrapper>
+    <>
+      {statusCode ? (
+        <Error statusCode={statusCode}></Error>
+      ) : (
+        <Wrapper>
+          <SignUpTpl onSubmit={onSubmit} />
+        </Wrapper>
+      )}
+    </>
   );
 };
 

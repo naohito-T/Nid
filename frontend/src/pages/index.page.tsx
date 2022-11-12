@@ -1,4 +1,5 @@
-import type { NextPage } from 'next';
+import type { NextPage, InferGetServerSidePropsType } from 'next';
+import Error from 'next/error';
 import styled from 'styled-components';
 import { TopTpl } from '@/components/templates';
 import { BackendGuestResource } from '@/apis/resources/guest/backend.resource';
@@ -14,13 +15,35 @@ const Wrapper = styled.main`
 // 期限が切れていなかったらlogin
 // 期限が切れていたら再度loginを伝える。
 export const getServerSideProps = async () => {
-  window.alert('Hello');
+  let statusCode: number | null = null;
+  /**
+   * @memo window.alert('Hello'); ここでnullアクセスも（500）
+   * throw new Error('status'); 500へ遷移（しかしmessageはとどかない）
+   */
+  // const backendGuestResource = new BackendGuestResource();
+  // ここの中でerrorがfetchされたらerrorページへ飛ばされる。
+  // const users = await backendGuestResource.signIn({ email: '', password: '' });
+  const isLogin = false;
+
+  if (!statusCode && !isLogin) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/user/signin',
+      },
+    };
+  }
+
   return {
-    props: {},
+    props: {
+      statusCode,
+    },
   };
 };
 
-const Top: NextPage = () => {
+type Props = InferGetServerSidePropsType<typeof getServerSideProps>;
+
+const Top: NextPage<Props> = ({ statusCode }) => {
   const onSubmit = async (singValue: SingValueType) => {
     // validationをして
     const backendGuestResource = new BackendGuestResource();
@@ -30,9 +53,15 @@ const Top: NextPage = () => {
   };
 
   return (
-    <Wrapper>
-      <TopTpl onSubmit={onSubmit} />
-    </Wrapper>
+    <>
+      {statusCode ? (
+        <Error statusCode={statusCode}></Error>
+      ) : (
+        <Wrapper>
+          <TopTpl onSubmit={onSubmit} />
+        </Wrapper>
+      )}
+    </>
   );
 };
 
