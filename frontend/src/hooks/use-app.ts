@@ -22,6 +22,7 @@ export const useApp = () => {
       setIsDarkMode(paletteMode === 'dark');
       localStorage.setItem(paletteModeStorageKey, paletteMode);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleChangePaletteMode = (event: React.ChangeEvent<HTMLInputElement>) => {

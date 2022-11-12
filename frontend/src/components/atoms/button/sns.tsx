@@ -1,4 +1,4 @@
-import { NextComponentType, NextPageContext } from 'next';
+import type { NextComponentType, NextPageContext } from 'next';
 import styled from 'styled-components';
 
 type Props = {

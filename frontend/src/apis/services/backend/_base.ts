@@ -61,10 +61,10 @@ export class BackendBase {
     let count = 0;
     try {
       const data = await this.axios.get<T>(path, { headers }).then((r) => r.data);
-      fetchLogger.info({ msg: 'Post Success', file: 'backend base' });
+      fetchLogger.info({ msg: 'Get Success', file: 'backend base' });
       return new Success(data);
     } catch (e: unknown) {
-      fetchLogger.info({ msg: 'Post Error', file: 'backend base' });
+      fetchLogger.info({ msg: 'Get Error', file: 'backend base' });
       if (Axios.isAxiosError(e)) {
         if (count === retry) {
           return new Failure(new ErrorResponse('backend base', e.status, e.code, e));

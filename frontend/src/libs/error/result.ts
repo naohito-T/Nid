@@ -1,3 +1,7 @@
+/**
+ * @desc Either Monad（イーザーモナード）でエラーは定義。
+ * 失敗する可能性のある計算について、その結果と失敗の理由両方を一度に表現することができる型。
+ */
 export type Result<T, E extends Error> = Success<T> | Failure<E>;
 
 export class Success<T> {
