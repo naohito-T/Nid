@@ -1,10 +1,10 @@
 import type { NextComponentType, NextPageContext } from 'next';
 import styled from 'styled-components';
 import { SingUp } from '@/components/organisms/top';
-import type { SingValueType } from '@/schema';
+import type { SignValueType } from '@/schema';
 
 type Props = {
-  onSubmit: (singValue: SingValueType) => Promise<void>;
+  onSubmit: (singValue: SignValueType) => Promise<void>;
 };
 
 /** 全体の設定 */

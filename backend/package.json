@@ -14,25 +14,18 @@
   "scripts": {
     "repl:db": "node --require ts-node/register/transpile-only --experimental-repl-await src/commands/db-repl",
     "ts": "ts-node --transpile-only -r tsconfig-paths/register --files",
-    "dev": "ts-node-dev -r tsconfig-paths/register src/index.ts",
+    "dev": "FORCE_COLOR=true ts-node-dev -r tsconfig-paths/register src/index.ts | pino-pretty -tc",
     "start": "ts-node -r tsconfig-paths/register src/index.ts",
-
     "orm:cli": "typeorm-ts-node-commonjs",
     "orm:local": "ts-node -r tsconfig-paths/register -T $(npm bin)/typeorm",
-
     "c": "からのmigrationファイル成功",
     "m:c": "yarn orm:local migration:create src/db/migration/init --timestamp",
-
     "d": "migration revert",
     "m:g": "yarn orm:local migration:generate -d src/db/setting/db.setting.ts",
-
     "m:up": "yarn orm:local migration:run -d src/db/setting/db.setting.ts",
-
     "m:down": "yarn orm:local migration:revert -d src/db/setting/db.setting.ts",
-
     "drop": "migration成功（dropしないといけない時もある）",
     "m:drop": "yarn orm:local schema:drop -d src/db/setting/db.setting.ts",
-
     "seed": "yarn ts src/command/seeder.ts",
     "show": "yarn orm:local migration:show -d src/db/setting/db.setting.ts",
     "format": "prettier -w './src/**/*.{js,ts,json}'",
@@ -53,13 +46,15 @@
     "cors": "^2.8.5",
     "express": "^4.17.2",
     "express-pino-logger": "^7.0.0",
+    "express-rate-limit": "^6.6.0",
     "express-session": "^1.17.3",
     "jsonwebtoken": "^8.5.1",
     "passport": "^0.6.0",
     "pg": "^8.4.0",
     "pino": "^8.7.0",
     "reflect-metadata": "^0.1.13",
-    "typeorm": "0.3.10"
+    "typeorm": "0.3.10",
+    "zod": "^3.19.1"
   },
   "devDependencies": {
     "@faker-js/faker": "^7.6.0",

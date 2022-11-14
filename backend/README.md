@@ -26,7 +26,6 @@ dbを完全な状態で起動しないといけない。
 ```sh
 $ run yarn m:g src/db/migration/[name]
 # こっちも試してみる
-$ run yarn m:g -- -n [name]
 ```
 
 マイグレーションを実行する（migrationフォルダーに作成される）

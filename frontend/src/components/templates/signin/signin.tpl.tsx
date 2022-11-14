@@ -1,10 +1,10 @@
 import type { NextComponentType, NextPageContext } from 'next';
 import styled from 'styled-components';
-import { SingIn } from '@/components/organisms/top';
-import type { SingValueType } from '@/schema';
+import { SignIn } from '@/components/organisms/top';
+import type { SignValueType } from '@/schema';
 
 type Props = {
-  onSubmit: (singValue: SingValueType) => Promise<void>;
+  onSubmit: (singValue: SignValueType) => Promise<void>;
 };
 
 /** 全体の設定 */
@@ -18,7 +18,7 @@ const Wrapper = styled.div`
 export const SignInTpl: NextComponentType<NextPageContext, null, Props> = ({ onSubmit }) => {
   return (
     <Wrapper data-testid='top-tpl'>
-      <SingIn onSubmit={onSubmit} />
+      <SignIn onSubmit={onSubmit} />
       <section>
         {/* <Button onClick={onClick}>API接続</Button>
 

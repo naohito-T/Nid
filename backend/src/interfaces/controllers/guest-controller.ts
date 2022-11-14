@@ -11,7 +11,15 @@ import { GuestServices } from '@/apis/services';
  * サービスを呼び出したあと処理を実行して
  */
 export class GuestController {
-  private guestService = new GuestServices();
+  private guestService: GuestServices;
+
+  constructor() {
+    this.guestService = new GuestServices();
+  }
 
   public getUsers = async (req: Request, res: Response, next: NextFunction) => {};
+
+  public signUp = async (req: Request, res: Response, next: NextFunction) => {};
+
+  public signIn = async (req: Request, res: Response, next: NextFunction) => {};
 }

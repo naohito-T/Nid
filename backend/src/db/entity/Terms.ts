@@ -24,7 +24,7 @@ export class Terms extends BaseIProperties {
   })
   termsVersion: Date | null = null;
 
-  @Column({ name: 'user_id' })
+  @Column('varchar', { name: 'user_id' })
   readonly userId: string;
   // @JoinColumnデコレーターはリレーションの一方の側でのみ使用する必要があることに注意してください。このデコレーターをどちら側に配置しても、関係の所有側になります。リレーションシップの所有側には、データベース内の外部キーを持つ列が含まれています。
   @OneToOne(() => User, (user) => user.hasTermsVersion) // relationを表現している。

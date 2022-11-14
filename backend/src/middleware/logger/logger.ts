@@ -57,5 +57,5 @@ export const messageLogger = logger.child({ target: 'message' });
  * @returns {expressPino, logger}
  */
 export const setupLogger = () => {
-  return [expressPino({ logger }), logger] as const;
+  return [expressPino({ logger })] as const;
 };

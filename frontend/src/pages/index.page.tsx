@@ -3,7 +3,7 @@ import Error from 'next/error';
 import styled from 'styled-components';
 import { TopTpl } from '@/components/templates';
 import { BackendGuestResource } from '@/apis/resources/guest/backend.resource';
-import type { SingValueType } from '@/schema';
+import type { SignValueType } from '@/schema';
 
 const Wrapper = styled.main`
   width: 100%;
@@ -44,7 +44,7 @@ export const getServerSideProps = async () => {
 type Props = InferGetServerSidePropsType<typeof getServerSideProps>;
 
 const Top: NextPage<Props> = ({ statusCode }) => {
-  const onSubmit = async (singValue: SingValueType) => {
+  const onSubmit = async (singValue: SignValueType) => {
     // validationをして
     const backendGuestResource = new BackendGuestResource();
     const users = await backendGuestResource.signIn(singValue);

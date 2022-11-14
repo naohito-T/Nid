@@ -28,27 +28,29 @@ export enum SexType {
 // @see typeormでentityを定義するガイドライン https://tech.bitbank.cc/typeorm-entity-guideline/
 @Entity('users')
 export class User extends BaseUProperties {
-  @Column({ name: 'first_name', comment: UserComments.firstName })
+  @Column('varchar', { name: 'first_name', comment: UserComments.firstName })
   firstName: string;
 
-  @Column({ name: 'last_name', comment: UserComments.lastName })
+  @Column('varchar', { name: 'last_name', comment: UserComments.lastName })
   lastName: string;
 
-  @Column({ name: 'age', comment: UserComments.age })
-  age: number;
+  // @Column('varchar',{ name: 'age', comment: UserComments.age })
+  // age: number;
+  @Column('timestamp', { name: 'birth_date', nullable: true })
+  birthDate: Date | null;
 
-  @Column({ name: 'sex', type: 'enum', enum: SexType, comment: UserComments.sex })
+  @Column('enum', { name: 'sex', enum: SexType, comment: UserComments.sex })
   sex: SexType;
 
-  @Column({ name: 'nick_name', comment: UserComments.nickName })
+  @Column('varchar', { name: 'nick_name', comment: UserComments.nickName })
   @Index()
   nickName: string;
 
-  @Column({ name: 'telephone_number', comment: UserComments.telephoneNumber })
+  @Column('varchar', { name: 'telephone_number', comment: UserComments.telephoneNumber })
   // @Matches(telephoneNumberRegExp)
   telephoneNumber: string;
 
-  @Column({
+  @Column('varchar', {
     name: 'thumbnail_url',
     nullable: true,
     default: null,
@@ -56,34 +58,34 @@ export class User extends BaseUProperties {
   })
   thumbnailUrl: string | null = null;
 
-  @Column({
+  @Column('varchar', {
     name: 'user_addresses',
     nullable: true,
     default: null,
     array: true,
     comment: UserComments.userAddress,
   })
-  @OneToMany(() => UserAddress, (userAddress) => userAddress.user, {
+  @OneToMany(() => UserAddress, (userAddress) => userAddress.userId, {
     eager: true, // これで一緒に取るはず。Userを取れば一緒に住所テーブルも一髪で取れる
   })
-  userAddress: UserAddress[] | null;
+  userAddress: string[] | null;
 
-  @Column({
+  @Column('varchar', {
     name: 'user_authorization',
     array: true,
     comment: UserComments.userAuthorization,
   })
-  @OneToMany(() => UserAuthentication, (userAuthentication) => userAuthentication.user)
+  @OneToMany(() => UserAuthentication, (userAuthentication) => userAuthentication.userId)
   userAuthorization: UserAuthentication[];
 
-  @Column({
+  @Column('timestamp', {
     name: 'has_terms_version',
     nullable: true,
     default: null,
     array: true,
     comment: UserComments.has_terms_version,
   })
-  @OneToOne(() => Terms, (terms) => terms.user)
+  @OneToOne(() => Terms, (terms) => terms.userId)
   hasTermsVersion: Date | null;
 }
 

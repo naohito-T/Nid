@@ -18,22 +18,27 @@ const UserAddressComment = {
 // こちらに送付するみたいな
 @Entity('user_addresses')
 export class UserAddress extends BaseIProperties {
-  @Column({ name: 'zip_code', comment: UserAddressComment.zip_code })
+  @Column('varchar', { name: 'zip_code', comment: UserAddressComment.zip_code })
   zipCode: string;
 
-  @Column({ name: 'prefecture', comment: UserAddressComment.prefecture })
+  @Column('varchar', { name: 'prefecture', comment: UserAddressComment.prefecture })
   prefecture: string;
 
-  @Column({ name: 'city', comment: UserAddressComment.city })
+  @Column('varchar', { name: 'city', comment: UserAddressComment.city })
   city: string;
 
-  @Column({ name: 'street', comment: UserAddressComment.street })
+  @Column('varchar', { name: 'street', comment: UserAddressComment.street })
   street: string;
 
-  @Column({ name: 'building', comment: UserAddressComment.building, nullable: true, default: null })
+  @Column('varchar', {
+    name: 'building',
+    comment: UserAddressComment.building,
+    nullable: true,
+    default: null,
+  })
   building: string | null;
 
-  @Column({ name: 'user_id' })
+  @Column('varchar', { name: 'user_id' })
   readonly userId: string;
   // @JoinColumnデコレーターはリレーションの一方の側でのみ使用する必要があることに注意してください。このデコレーターをどちら側に配置しても、関係の所有側になります。リレーションシップの所有側には、データベース内の外部キーを持つ列が含まれています。
   @ManyToOne(() => User, (user) => user.userAddress) // relationを表現してい

@@ -21,23 +21,22 @@ const UserAuthComment = {
  */
 @Entity('user_authorizations')
 export class UserAuthentication extends BaseIProperties {
-  @Column({
+  @Column('enum', {
     name: 'identity_type',
-    type: 'enum',
     enum: IdentityType,
     comment: UserAuthComment.identity_type,
   })
   identityType: IdentityType;
 
   // Uniqueいけるかも
-  @Column({ name: 'identifier', comment: UserAuthComment.identifier })
+  @Column('integer', { name: 'identifier', comment: UserAuthComment.identifier })
   identifier: number;
 
   // Uniqueいけるかも
-  @Column({ name: 'credential', comment: UserAuthComment.credential })
+  @Column('integer', { name: 'credential', comment: UserAuthComment.credential })
   credential: number;
 
-  @Column({ name: 'user_id' })
+  @Column('varchar', { name: 'user_id' })
   readonly userId: string; // relationする
 
   @ManyToOne(() => User, (user) => user.userAuthorization) // relationを表現してい

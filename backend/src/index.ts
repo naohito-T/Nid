@@ -1,5 +1,7 @@
+import 'reflect-metadata';
 import { Application } from '@/apis';
 import { Environment, runtimeEnv } from '@/configs';
+import { messageLogger } from '@/middleware/logger';
 
 // jestはdef testで起動する。
 const isTest = runtimeEnv() === Environment.Test;
@@ -11,9 +13,9 @@ app
   .setup()
   .then((_) => {
     app.getApp.listen(3100, () => {
-      console.log(
+      messageLogger.info(
         'Express server has Started!!! on port 3100. Open http://localhost:3100/api/v1/users to see results',
       );
     });
   })
-  .catch((e: unknown) => console.log(e));
+  .catch((e: unknown) => messageLogger.error(e));

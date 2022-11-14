@@ -17,7 +17,7 @@ export const LayoutTpl: NextComponentType<NextPageContext, null, Props> = ({
   children,
 }) => {
   return (
-    <Wrapper data-testid='layout'>
+    <Wrapper data-testid='layout-tpl'>
       {isProgress ? <Progress isProgress={isProgress} /> : <MainWrap>{children}</MainWrap>}
     </Wrapper>
   );

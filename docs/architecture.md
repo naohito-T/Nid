@@ -28,6 +28,8 @@ client
 ↓
 router
 ↓
+rate-limit（アプリケーション層でやるべきではないかもしれないが....）
+↓
 validation
 ↓
 controller

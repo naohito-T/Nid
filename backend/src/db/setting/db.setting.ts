@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import { DataSource } from 'typeorm';
 import { User, UserAddress, UserAuthentication, Terms } from '@/db/entity';
 
@@ -10,14 +9,11 @@ export const AppDataSource = new DataSource({
   port: Number(process.env.TYPEORM_PORT),
   username: process.env.TYPEORM_USER,
   password: process.env.TYPEORM_PASS,
-  // database: process.env.TYPEORM_DB,
-  database: 'nid',
+  database: process.env.TYPEORM_DB,
   // マイグレーションファイルの作成と実行を自動化する（本番NG）
   synchronize: false,
   logging: true,
-  // entities: [User],
   entities: [User, UserAddress, UserAuthentication, Terms],
-  // entities: [User, UserAddress, UserAuth, UserRole],
   migrations: ['src/db/migration/*.ts'],
   // subscribers: [],
 });

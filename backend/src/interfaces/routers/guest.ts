@@ -1,12 +1,13 @@
 import express from 'express';
 import type { Router } from 'express-serve-static-core';
-import { UserEndpoints } from '@/configs';
+import { UserEndpoints, GuestEndpoints } from '@/configs';
 import { GuestController } from '@/interfaces/controllers';
 import { Request, Response, NextFunction } from 'express';
 
 export const guestRouter = (): Router => {
   // エラーログのアップロード
   const router = express.Router();
+  const guestController = new GuestController();
 
   /**
    * 順番としては
@@ -15,7 +16,6 @@ export const guestRouter = (): Router => {
    * 3. バリデーション
    * 4. handlerに渡す。ここコントローラにする？
    */
-  const gc = new GuestController();
 
   router.get('/test', (req, res) => {
     // @ts-ignore
@@ -39,7 +39,10 @@ export const guestRouter = (): Router => {
     });
   });
 
-  router.get(UserEndpoints.users, gc.getUsers);
+  router.get(UserEndpoints.users, guestController.getUsers);
+
+  router.post(GuestEndpoints.signUp, guestController.signIn, guestController.signUp);
+  router.post(GuestEndpoints.signIn, guestController.signIn);
 
   return router;
 };

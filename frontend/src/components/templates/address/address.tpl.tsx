@@ -1,7 +1,7 @@
 import type { NextComponentType, NextPageContext } from 'next';
 import styled from 'styled-components';
 import { useState } from 'react';
-import type { SingValueType } from '@/schema';
+import type { SignValueType } from '@/schema';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography';
 import AddressForm from './address-form';
 
 type Props = {
-  onSubmit: (singValue: SingValueType) => Promise<void>;
+  onSubmit: (singValue: SignValueType) => Promise<void>;
 };
 
 /** 全体の設定 */

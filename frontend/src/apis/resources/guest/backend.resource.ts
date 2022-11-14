@@ -1,6 +1,6 @@
 import { BackendBase } from '@/apis/services/backend';
 import type { IGuestResource } from '@/apis/interfaces/guest';
-import type { UserType, SingValueType } from '@/schema';
+import type { UserType, SignValueType } from '@/schema';
 import { GuestRouter } from '@/configs';
 
 /**
@@ -11,8 +11,8 @@ export class BackendGuestResource extends BackendBase implements IGuestResource 
     super();
   }
 
-  public signUp = async (singValue: SingValueType): Promise<UserType> => {
-    const users = await this.post<UserType, SingValueType>(GuestRouter.signUp, singValue);
+  public signUp = async (singValue: SignValueType): Promise<UserType> => {
+    const users = await this.post<UserType, SignValueType>(GuestRouter.signUp, singValue);
     if (users.isSuccess()) {
       return users.getSuccessValue();
     } else {
@@ -22,8 +22,8 @@ export class BackendGuestResource extends BackendBase implements IGuestResource 
     }
   };
 
-  public signIn = async (singValue: SingValueType): Promise<UserType> => {
-    const users = await this.post<UserType, SingValueType>(GuestRouter.signIn, singValue);
+  public signIn = async (singValue: SignValueType): Promise<UserType> => {
+    const users = await this.post<UserType, SignValueType>(GuestRouter.signIn, singValue);
     if (users.isSuccess()) {
       return users.getSuccessValue();
     } else {

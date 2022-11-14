@@ -3,10 +3,11 @@ import Error from 'next/error';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { progressState } from '@/stores/common';
+import { SignValueScheme } from '@/schema';
 import { SignInTpl, LayoutTpl } from '@/components/templates';
 import { BackendGuestResource } from '@/apis/resources/guest/backend.resource';
 
-import type { SingValueType } from '@/schema';
+import type { SignValueType } from '@/schema';
 
 const Wrapper = styled.div``;
 
@@ -32,14 +33,14 @@ type Props = InferGetServerSidePropsType<typeof getServerSideProps>;
 const SingIn: NextPage<Props> = ({ statusCode }) => {
   const [isProgress, setIsProgress] = useRecoilState(progressState);
 
-  const onSubmit = async (singValue: SingValueType) => {
-    // validationをして
+  // validationをして成功であればprogressを外す
+  const onSubmit = async (signValue: SignValueType) => {
     setIsProgress(true);
-
+    // 検証
+    const parsedSignValue = await SignValueScheme.parseAsync(signValue);
     const backendGuestResource = new BackendGuestResource();
     console.log(`users`);
-
-    // const users = await backendGuestResource.signIn(singValue);
+    const user = await backendGuestResource.signIn(parsedSignValue);
     // TODO useState or Recoil
     await new Promise((r) => setTimeout(r, 5000)).finally(() => setIsProgress(false));
     // console.log(`users ${users}`);
