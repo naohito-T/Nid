@@ -1,15 +1,16 @@
-import { Request, Response, NextFunction } from 'express';
-import http from 'http';
+import { Request, Response } from 'express';
 import { Send, Query } from 'express-serve-static-core';
 
 /**
  * @see https://javascript.plainenglish.io/typed-express-request-and-response-with-typescript-7277aea028c
+ * @see https://techblog.istyle.co.jp/archives/8568
  * Express req & resに型推論を効かせるために使用する（拡張させることでより効かせる）
  */
 
 /**
  * @desc payload（body）に効かせる
  */
+
 export interface TypedRequestBody<T> extends Request {
   body: T;
 }
@@ -29,6 +30,13 @@ export interface TypedRequest<T extends Query, U> extends Request {
   query: T;
 }
 
+interface ErrorResponse {
+  errors: Array<{
+    message: string;
+    code?: number;
+  }>;
+}
+
 export interface TypedResponse<ResBody> extends Response {
-  json: Send<ResBody, this>;
+  json: Send<ResBody | ErrorResponse, this>;
 }

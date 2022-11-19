@@ -9,9 +9,9 @@ interface SuccessResFormat<T> {
  * @desc errorレスポンスのbuilder
  */
 export const successSerializer = <T>(
-  res: TypedResponse<SuccessResFormat<T>>,
+  res: TypedResponse<T>,
   statusCode: number,
   successValue: T,
 ) => {
-  res.status(statusCode).json({ data: successValue });
+  res.status(statusCode).json(successValue);
 };

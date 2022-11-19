@@ -58,11 +58,16 @@ backend/
 
 これやる
 [参考URL](https://expressjs.com/ja/advanced/best-practice-security.html)
-
 ## エラーレスポンス
+
 [これを参考](https://labs.goo.ne.jp/api_error_info/)
 
 `{"error": {"code": 400, "message": "Invalid JSON"}}`
+
+## 時間とのやりとり
+
+当サーバはUNIXタイムスタンプでやりとりをしています。
+時間をリクエストに含む場合はUNIXタイムスタンプで送信してください。
 
 ## Express 型拡張
 [コード](https://github.com/tomnil/typedexpress/blob/master/src/index.ts)

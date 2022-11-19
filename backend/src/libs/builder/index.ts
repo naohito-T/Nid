@@ -1,2 +1,1 @@
-export * from './success.builder';
-export * from './error.builder';
+export * from './tmp-code';

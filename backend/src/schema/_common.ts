@@ -10,10 +10,10 @@ export const UCommonSchema = z.object({
 });
 
 /**
- * @desc idがぷr
+ * @desc idがプライマリキー
  */
 export const ICommonSchema = z.object({
-  id: z.string(),
+  id: z.number(),
   createdAt: z.date(),
   updatedAt: z.date(),
 });

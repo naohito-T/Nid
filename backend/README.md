@@ -35,6 +35,9 @@ dbを完全な状態で起動しないといけない。
 
 ## Tips
 
+- package.jsonにパッケージを追加したとき（volumeにライブラリをインストールします）
+`$ run yarn install`  
+
 - migrationを生成したい時
 `TimeStamp_[name].ts`でマイグレーションファイルが作成されるのでnameに値を入れてください。
 `$ run yarn m:g src/db/migration/[name]`

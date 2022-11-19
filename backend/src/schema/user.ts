@@ -1,5 +1,7 @@
 import { z } from 'zod';
 import { UCommonSchema } from './_common';
+import { Address } from './address';
+import { Terms } from './terms';
 import { validationMessages as V } from '@/libs/validations';
 
 export const UserSchema = UCommonSchema.extend({
@@ -51,3 +53,10 @@ export const UserSchema = UCommonSchema.extend({
   );
 
 export type User = z.infer<typeof UserSchema>;
+
+// WORKAROUND とりあえずだが変数名思いついたら変える。
+export type RelationUser = {
+  user: User;
+  address: Address | null;
+  terms: Terms | null;
+};
