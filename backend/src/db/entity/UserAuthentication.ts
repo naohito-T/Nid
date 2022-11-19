@@ -11,6 +11,7 @@ export enum IdentityType {
 const UserAuthComment = {
   identity_type: 'ログインタイプ(メール、 Githubなど)',
   identifier: '該当ログインタイプの識別子(メールアドレス、 githubユーザー名など)',
+  password: 'パスワード',
   credential: 'クレデンシャル(外部サービス発行されたtoken,認証コードなど)',
 } as const;
 
@@ -28,11 +29,14 @@ export class UserAuthentication extends BaseIProperties {
   })
   identityType: IdentityType;
 
-  // Uniqueいけるかも
+  // TODO Uniqueいけるかも
   @Column('integer', { name: 'identifier', comment: UserAuthComment.identifier })
   identifier: number;
 
-  // Uniqueいけるかも
+  @Column('varchar', { name: 'password', comment: UserAuthComment.password })
+  password: string;
+
+  // TODO Uniqueいけるかも
   @Column('integer', { name: 'credential', comment: UserAuthComment.credential })
   credential: number;
 
@@ -40,6 +44,6 @@ export class UserAuthentication extends BaseIProperties {
   readonly userId: string; // relationする
 
   @ManyToOne(() => User, (user) => user.userAuthorization) // relationを表現してい
-  @JoinColumn({ name: 'userId' }) // userIdがforeignキーとなることを表す。
+  @JoinColumn({ name: 'user_Id' }) // userIdがforeignキーとなることを表す。
   user: User;
 }

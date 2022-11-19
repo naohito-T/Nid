@@ -7,10 +7,11 @@ import { Terms } from './Terms';
 const UserComments = {
   firstName: '苗字',
   lastName: '名前',
-  age: '年齢',
+  birthDay: '生年月日',
   sex: '性別 0: 男性 1: 女性 2: 回答なし',
   nickName: 'ニックネーム',
   telephoneNumber: '電話番号',
+  email: 'メールアドレス',
   thumbnailURL: 'サムネイル',
   userAddress: 'ユーザが持っている住所（複数持てる）',
   userAuthorization: '認証したフロー（複数ある想定）',
@@ -34,9 +35,7 @@ export class User extends BaseUProperties {
   @Column('varchar', { name: 'last_name', comment: UserComments.lastName })
   lastName: string;
 
-  // @Column('varchar',{ name: 'age', comment: UserComments.age })
-  // age: number;
-  @Column('timestamp', { name: 'birth_date', nullable: true })
+  @Column('timestamp', { name: 'birth_date', nullable: true, comment: UserComments.birthDay })
   birthDate: Date | null;
 
   @Column('enum', { name: 'sex', enum: SexType, comment: UserComments.sex })
@@ -49,6 +48,9 @@ export class User extends BaseUProperties {
   @Column('varchar', { name: 'telephone_number', comment: UserComments.telephoneNumber })
   // @Matches(telephoneNumberRegExp)
   telephoneNumber: string;
+
+  @Column('varchar', { name: 'email', comment: UserComments.email, unique: true })
+  email: string;
 
   @Column('varchar', {
     name: 'thumbnail_url',
@@ -66,7 +68,7 @@ export class User extends BaseUProperties {
     comment: UserComments.userAddress,
   })
   @OneToMany(() => UserAddress, (userAddress) => userAddress.userId, {
-    eager: true, // これで一緒に取るはず。Userを取れば一緒に住所テーブルも一髪で取れる
+    eager: true, // これで一緒に取るはず。Userを取れば一緒に住所テーブルも一回のクエリーで取れる
   })
   userAddress: string[] | null;
 
@@ -88,5 +90,3 @@ export class User extends BaseUProperties {
   @OneToOne(() => Terms, (terms) => terms.userId)
   hasTermsVersion: Date | null;
 }
-
-export type UserEntity = typeof User;

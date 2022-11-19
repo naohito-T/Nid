@@ -44,20 +44,3 @@ export class Failure<E extends Error> {
  * statusCode ⇒ HTTPのステータスコード
  * code ⇒ 開発者側で認識するエラーコード
  */
-export class ErrorResponse extends Error {
-  readonly name: string;
-  readonly message: string;
-  readonly stack?: string;
-
-  constructor(
-    readonly functionName: string = 'unknown functionName',
-    readonly statusCode: number = 500,
-    readonly code: string = 'APP_UNKNOWN_ERROR',
-    readonly error: Error = new Error('unknown error'),
-  ) {
-    super();
-    this.name = error.name;
-    this.message = error.message;
-    this.stack = error.stack;
-  }
-}

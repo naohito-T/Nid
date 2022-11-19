@@ -3,6 +3,7 @@ import type { Router } from 'express-serve-static-core';
 import { UserEndpoints, GuestEndpoints } from '@/configs';
 import { GuestController } from '@/interfaces/controllers';
 import { Request, Response, NextFunction } from 'express';
+import { signValidation } from '@/libs/validations';
 
 export const guestRouter = (): Router => {
   // エラーログのアップロード
@@ -41,8 +42,8 @@ export const guestRouter = (): Router => {
 
   router.get(UserEndpoints.users, guestController.getUsers);
 
-  router.post(GuestEndpoints.signUp, guestController.signIn, guestController.signUp);
-  router.post(GuestEndpoints.signIn, guestController.signIn);
+  router.post(GuestEndpoints.signUp, signValidation, guestController.signUp);
+  router.post(GuestEndpoints.signIn, signValidation, guestController.signIn);
 
   return router;
 };

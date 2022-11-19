@@ -1,12 +1,12 @@
 import { BackendBase } from '@/apis/services/backend';
-import type { IGuestResource } from '@/apis/interfaces/guest';
+import type { IGuestBackendResource } from '@/apis/interfaces/guest';
 import type { UserType, SignValueType } from '@/schema';
 import { GuestRouter } from '@/configs';
 
 /**
  * @desc Not login APIs.
  */
-export class BackendGuestResource extends BackendBase implements IGuestResource {
+export class BackendGuestResource extends BackendBase implements IGuestBackendResource {
   constructor() {
     super();
   }

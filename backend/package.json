@@ -32,12 +32,6 @@
     "deploy": "sls deploy -r ap-northeast-1",
     "remove": "sls remove -r ap-northeast-1"
   },
-  "config": {
-    "alias": {
-      "tsnode": "ts-node -r tsconfig-paths/register -T",
-      "typeorm": "ts-node -r tsconfig-paths/register -T $(npm bin)/typeorm"
-    }
-  },
   "dependencies": {
     "aws-sdk": "^2.1231.0",
     "bcrypt": "^5.1.0",

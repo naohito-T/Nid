@@ -2,16 +2,15 @@ import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { DataSource } from 'typeorm';
-import { Request, Response } from 'express';
 import { AppDataSource } from '@/db/setting/db.setting';
-import { Routes } from '@/interfaces/routers';
-import { User, SexType } from '@/db/entity/User';
 import { corsOptions } from '@/middleware/cors';
 import { setupSession } from '@/middleware/session';
 import { setupLogger, messageLogger } from '@/middleware/logger';
 import { limiter } from '@/middleware/rate';
 import { guestRouter } from '@/interfaces/routers';
 import { commonVersionPath } from '@/configs';
+import { errorSerializer } from '@/libs/serializer';
+import { NOT_FOUND } from '@/libs/errors';
 
 export class Application {
   private app: express.Express;
@@ -51,6 +50,7 @@ export class Application {
         messageLogger.debug({ msg: 'Finish setup to db.' });
       } catch (e: unknown) {
         messageLogger.error(e);
+        throw new Error('db setup error');
       }
     }
   };
@@ -75,18 +75,16 @@ export class Application {
       messageLogger.info({ msg: 'Finish setup to middleware' });
     } catch (e: unknown) {
       messageLogger.error(e);
+      throw new Error('middleware error');
     }
   };
 
   private setupRouter = async () => {
-    messageLogger.debug({ msg: 'Middleware Start.' });
-    /** @desc pathごとにrate limitかける */
+    /**
+     * @desc pathごとにrate limitかける
+     */
     this.app.use(commonVersionPath, limiter);
-    messageLogger.debug({ msg: 'Finish setup to rate-limit.' });
-
-    messageLogger.debug({ msg: 'Router Start.' });
     this.app.use(commonVersionPath, guestRouter());
-    messageLogger.debug({ msg: 'Finish setup to Router.' });
   };
 
   /**
@@ -97,31 +95,10 @@ export class Application {
     messageLogger.debug({ msg: 'Launch App Start.' });
     await this.setupRouter();
 
-    // await this.ds.manager.save(
-    //   this.ds.manager.create(User, {
-    //     first_name: 'Timber',
-    //     last_name: 'Saw',
-    //     age: 27,
-    //     sex: SexType.female,
-    //     nick_name: 'a',
-    //     telephone_number: '03030303',
-    //   }),
-    // );
-    // await this.ds.manager.save(
-    //   this.ds.manager.create(User, {
-    //     first_name: 'Phantom',
-    //     last_name: 'Assassin',
-    //     age: 24,
-    //     sex: SexType.female,
-    //     nick_name: 'a',
-    //     telephone_number: '03030303',
-    //   }),
-    // );
-
     /** 未定義API */
     this.app.use(async (_, res) => {
       await this.ds.destroy();
-      res.sendStatus(404);
+      errorSerializer(res, NOT_FOUND.statusCode, NOT_FOUND.message);
     });
 
     process.on('unhandledRejection', (reason, p) => {

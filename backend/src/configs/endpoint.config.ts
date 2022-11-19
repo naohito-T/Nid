@@ -11,6 +11,7 @@ export const GuestEndpoints = {
 
 export const UserEndpoints = {
   users: '/users',
+  me: '/users/me'
 };
 
 export const AdminEndpoints = {};

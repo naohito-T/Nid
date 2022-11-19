@@ -11,6 +11,8 @@ services:
       - "3100:3100"
     volumes:
       - .:/app:cached
+      # Volume Trickというテクニック（parrotのbundleもそう）
+      - nid-node-modules:/app/node_modules
     env_file: $PWD/env/local/.env
     depends_on:
       # @see https://gotohayato.com/content/533/
@@ -31,7 +33,7 @@ services:
       # これなかったら気になる。
       POSTGRES_INITDB_ARGS: '--encoding=UTF-8'
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - nid-db-data:/var/lib/postgresql/data
     # 指定しておくとコンテナ停止時にサービスが再起動してくれる。
     restart: always
     healthcheck:
@@ -46,7 +48,7 @@ services:
       - "24566:4566" # すべてのサービスポート
     volumes:
       # データのマウント
-      - 'localstack-data:/tmp/localstack'
+      - 'nid-localstack-data:/tmp/localstack'
     environment:
       # 有効にするサービス
       LOCALSTACK_SERVICES: dynamodb,s3,ses,sqs
@@ -62,5 +64,6 @@ services:
       retries: 5
 
 volumes:
-  db-data: {}
-  localstack-data: {}
+  nid-node-modules: {}
+  nid-db-data: {}
+  nid-localstack-data: {}

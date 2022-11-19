@@ -2,6 +2,9 @@
 .vscode/
 .git/
 .gitignore
+# node_moduleはdockerignore指定をする。
+# node_modulesはgitでも無視するはずなので、新しく環境構築する人のディレクトリにはそもそも入ってませんし
+# イメージをリビルドするときにホストのnode_modulesからイメージ内のnode_modulesが上書きされることも避ける必要があるからです。
 node_modules/
 doc/
 build/

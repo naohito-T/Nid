@@ -8,7 +8,6 @@ A short command is provided. If you want to use.
 1. Run `yarn install` command
 2. Run `up` command
 
-
 ## 新規にvolumeを作成する場合
 
 dbデータなどmigrationがかかってないためmigrationを適用される。
@@ -22,28 +21,25 @@ dbデータなどmigrationがかかってないためmigrationを適用される
 
 dbを完全な状態で起動しないといけない。
 
-`TimeStamp_[name].ts`でマイグレーションファイルが作成されます。
-```sh
-$ run yarn m:g src/db/migration/[name]
-# こっちも試してみる
-```
+1. イメージをビルドする。
+`$ build`
 
-マイグレーションを実行する（migrationフォルダーに作成される）
-```sh
-$ run yarn m:up
-```
+2. マイグレーションを実行する（migrationフォルダーに作成される）
+`$ run yarn m:up`
 
-マイグレーションをリバートする
-```sh
-$ run yarn m:down
-```
+3. dbにseedする
+`$ run yarn seed`
 
-dbにseedする
-```sh
-$ run yarn seed
-```
+4. アプリケーションを起動する
+`$ up`
 
-```sh
-$ up
-```
+## Tips
 
+- migrationを生成したい時
+`TimeStamp_[name].ts`でマイグレーションファイルが作成されるのでnameに値を入れてください。
+`$ run yarn m:g src/db/migration/[name]`
+
+- マイグレーションをリバートしたい時
+`$ run yarn m:down`
+
+- db自体をdropする。

@@ -1,6 +1,6 @@
 import Axios, { AxiosInstance } from 'axios';
 import { Result, Success, Failure, ErrorResponse } from '@/libs/error';
-import { fetchLogger, errorLogger } from '@/middleware/log';
+import { fetchLogger, eventLogger } from '@/middleware/log';
 export class BackendBase {
   private readonly baseURL;
   private readonly axios;
@@ -27,7 +27,7 @@ export class BackendBase {
    */
   private fetchRetry = async (count: number): Promise<number> => {
     await new Promise((r) => setTimeout(r, 50000));
-    fetchLogger.info({ msg: 'retry', count });
+    eventLogger.debug({ msg: 'retry', count });
     return ++count;
   };
 
@@ -122,7 +122,7 @@ export class BackendBase {
    * @desc GuestResource ユーティリティ Logs（ここにdatadog or sentry）
    */
   protected interceptLogs = (functionName: string, statusCode: number, code: string) => {
-    errorLogger.error({
+    eventLogger.error({
       functionName,
       statusCode,
       code,

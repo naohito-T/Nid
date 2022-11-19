@@ -64,5 +64,6 @@ export const messageLogger = logger.child({ target: 'message' });
 
 /**
  * @desc Log for error
+ * これはいらないと思う。errorハンドリングできているから
  */
-export const errorLogger = logger.child({ target: 'error' });
+// export const errorLogger = logger.child({ target: 'error' });

@@ -1,20 +1,53 @@
 import { z } from 'zod';
-import { User, SexType } from '@/db/entity';
+import { UCommonSchema } from './_common';
+import { validationMessages as V } from '@/libs/validations';
 
-export const UserSchema = z.object({
-  id: z.string(),
-  // @WORKAROUND フロントでparseしているが一応入れるか。エラーメッセージを入れる。
-  firstName: z.string().min(1, { message: 'First name Required' }).max(32, { message: 'Max 32' }),
-  // @WORKAROUND フロントでparseしているが一応入れるか。エラーメッセージを入れる。
-  lastName: z.string().min(1, { message: 'Last name Required' }).max(32, { message: 'Max 32' }),
-  age: z.string().min(1, { message: 'First name Required' }).max(32, { message: 'Max 32' }),
-  // @TODO enumで default none
-  // sex: z.enum([SexType.female, SexType.male]).optional()
-  nickName: z.string().min(1, { message: 'First name Required' }).max(32, { message: 'Max 32' }),
-  telephoneNumber: z
-    .string()
-    .min(1, { message: 'First name Required' })
-    .max(32, { message: 'Max 32' }),
-});
+export const UserSchema = UCommonSchema.extend({
+  firstName: z.string().min(1, { message: V.min }).max(32, { message: V.max32 }),
+  lastName: z.string().min(1, { message: V.min }).max(32, { message: V.max32 }),
+  birthDate: z.string().min(1, { message: V.min }).max(32, { message: V.max32 }),
+  sex: z.number().optional().default(0),
+  nickName: z.string().min(1, { message: V.min }).max(32, { message: V.max32 }),
+  telephoneNumber: z.string().min(1, { message: V.min }).max(32, { message: V.max32 }),
+  email: z.string().min(1, { message: V.min }).max(50, { message: V.max32 }).email(),
+  thumbnailUrl: z.string().nullable(),
+  userAddress: z.array(z.object({})).nullable(),
+  userAuthentication: z.array(z.object({}).nullable()),
+  hasTermsVersion: z.string().min(1, { message: V.min }).max(32).nullable(),
+})
+  .strict()
+  .transform(
+    async ({
+      id,
+      createdAt,
+      updatedAt,
+      firstName,
+      lastName,
+      birthDate,
+      sex,
+      nickName,
+      telephoneNumber,
+      email,
+      thumbnailUrl,
+      userAddress,
+      userAuthentication,
+      hasTermsVersion,
+    }) => ({
+      id,
+      createdAt,
+      updatedAt,
+      firstName,
+      lastName,
+      birthDate,
+      sex,
+      nickName,
+      telephoneNumber,
+      email,
+      thumbnailUrl: thumbnailUrl ?? null,
+      userAddress: userAddress.length === 0 ? null : userAddress,
+      userAuthentication,
+      hasTermsVersion: hasTermsVersion ?? null,
+    }),
+  );
 
-export type UserSchemaType = z.infer<typeof UserSchema>;
+export type User = z.infer<typeof UserSchema>;

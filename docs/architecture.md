@@ -42,9 +42,10 @@ domain/models db接続処理終わったあとデータ格納
 ↓
 controller
 ↓
-シリアライザー or ビルダー
+ビルダー（defaultがnullで何か、enumを何かなど組み立てる部分）
 ↓
-res
+シリアライザー（jsonにシリアライズする。）
+
 
 ```sh
 backend/
@@ -57,6 +58,14 @@ backend/
 
 これやる
 [参考URL](https://expressjs.com/ja/advanced/best-practice-security.html)
+
+## エラーレスポンス
+[これを参考](https://labs.goo.ne.jp/api_error_info/)
+
+`{"error": {"code": 400, "message": "Invalid JSON"}}`
+
+## Express 型拡張
+[コード](https://github.com/tomnil/typedexpress/blob/master/src/index.ts)
 
 ## localでの実行
 

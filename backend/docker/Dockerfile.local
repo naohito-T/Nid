@@ -13,7 +13,7 @@ FROM node:16.17.0-slim
 
 WORKDIR /app
 
-ENV NODE_ENV local
+ENV NODE_ENV development
 
 RUN apt update -qqy \
   && apt upgrade -qqy \
@@ -27,4 +27,6 @@ RUN apt update -qqy \
 COPY package.json yarn.lock ./
 
 # --frozen-lockfileフラグを付けるとyarn.lockが更新されず、パッケージの更新が必要な場合は失敗するようになる
+# ここでnode_modulesをinstallするようになるとイメージにnode_modulesが含まれる。
+# それをバインドマウントで上書きしないようにVolume Trickを使う
 RUN yarn install --frozen-lockfile
