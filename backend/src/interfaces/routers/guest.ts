@@ -1,8 +1,7 @@
 import express from 'express';
 import type { Router } from 'express-serve-static-core';
-import { UserEndpoints, GuestEndpoints } from '@/configs';
+import { GuestEndpoints } from '@/configs';
 import { GuestController } from '@/interfaces/controllers';
-import { Request, Response, NextFunction } from 'express';
 import { signValidation } from '@/libs/validations';
 
 export const guestRouter = (): Router => {
@@ -39,8 +38,6 @@ export const guestRouter = (): Router => {
       res.send('logout');
     });
   });
-
-  router.get(UserEndpoints.users, guestController.getUsers);
 
   router.post(GuestEndpoints.signUp, signValidation, guestController.signUp);
   router.post(GuestEndpoints.signIn, signValidation, guestController.signIn);

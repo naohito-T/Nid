@@ -10,5 +10,6 @@ const checkSchema =
   };
 
 export * from './user';
-export * from './sign-value';
 export * from './header';
+export * from './sign-value';
+export * from './tmp-token'

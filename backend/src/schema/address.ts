@@ -1,19 +1,19 @@
 import { z } from 'zod';
 import { ICommonSchema } from './_common';
-import { validationMessages as V } from '@/libs/validations';
 
 export const AddressSchema = ICommonSchema.extend({
-  zipCode: z.string().min(1, { message: V.min }).max(32, { message: V.max32 }),
-  prefecture: z.string().min(1, { message: V.min }).max(32, { message: V.max32 }),
-  city: z.string().min(1, { message: V.min }).max(32, { message: V.max32 }),
-  street: z.number().optional().default(0),
-  building: z.string().min(1, { message: V.min }).max(32, { message: V.max32 }),
+  zipCode: z.string().min(1).max(32),
+  prefecture: z.string().min(1).max(32),
+  city: z.string().min(1).max(32),
+  street: z.string().min(1).max(32),
+  building: z.string().optional(),
 })
   .strict()
-  .transform(async ({ id, createdAt, updatedAt, prefecture, city, street, building }) => ({
+  .transform(async ({ id, createdAt, updatedAt, zipCode, prefecture, city, street, building }) => ({
     id,
     createdAt,
     updatedAt,
+    zipCode,
     prefecture,
     city,
     street,

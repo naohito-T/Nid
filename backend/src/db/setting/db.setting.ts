@@ -1,5 +1,5 @@
 import { DataSource } from 'typeorm';
-import { User, UserAddress, UserAuthentication, Terms } from '@/db/entity';
+import { User, UserAddress, UserAuthentication, Term } from '@/db/entity';
 
 // @see https://zenn.dev/ebaryo/articles/ac6f38140218df
 // @see https://kenjimorita.jp/no-changes-in-database-schema-were-found-cannot-generate-a-migration-to-create-a-new-empty-migration-use-typeorm-migrationcreate-command/
@@ -13,7 +13,7 @@ export const AppDataSource = new DataSource({
   // マイグレーションファイルの作成と実行を自動化する（本番NG）
   synchronize: false,
   logging: true,
-  entities: [User, UserAddress, UserAuthentication, Terms],
+  entities: [User, UserAddress, UserAuthentication, Term],
   migrations: ['src/db/migration/*.ts'],
   // subscribers: [],
 });

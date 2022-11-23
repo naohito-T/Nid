@@ -1,15 +1,8 @@
 import { TypedResponse } from '@/middleware/express';
 
-interface ErrorResponse {
-  errors: {
-    message: string;
-    code?: number;
-  }[];
-}
-
 /**
  * @see https://labs.goo.ne.jp/api_error_info/
- * @desc errorレスポンスのbuilder
+ * @desc errorレスポンスのシリアライザー
  */
 export const errorSerializer = <T>(
   res: TypedResponse<T>,

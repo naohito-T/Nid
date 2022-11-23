@@ -1,5 +1,4 @@
-import { Repository, DataSource, EntityManager } from 'typeorm';
-import { User, UserEntity } from '@/db/entity';
+import { User } from '@/db/entity';
 import { AppDataSource } from '@/db/setting';
 
 /**

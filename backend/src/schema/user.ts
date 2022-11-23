@@ -1,21 +1,20 @@
 import { z } from 'zod';
 import { UCommonSchema } from './_common';
 import { Address } from './address';
-import { Terms } from './terms';
-import { validationMessages as V } from '@/libs/validations';
+import { Term } from './term';
 
 export const UserSchema = UCommonSchema.extend({
-  firstName: z.string().min(1, { message: V.min }).max(32, { message: V.max32 }),
-  lastName: z.string().min(1, { message: V.min }).max(32, { message: V.max32 }),
-  birthDate: z.string().min(1, { message: V.min }).max(32, { message: V.max32 }),
+  firstName: z.string().min(1).max(32),
+  lastName: z.string().min(1).max(32),
+  birthDate: z.string().min(1).max(32),
   sex: z.number().optional().default(0),
-  nickName: z.string().min(1, { message: V.min }).max(32, { message: V.max32 }),
-  telephoneNumber: z.string().min(1, { message: V.min }).max(32, { message: V.max32 }),
-  email: z.string().min(1, { message: V.min }).max(50, { message: V.max32 }).email(),
+  nickName: z.string().min(1).max(32),
+  telephoneNumber: z.string().min(1).max(32),
+  email: z.string().min(1).max(50).email(),
   thumbnailUrl: z.string().nullable(),
   userAddress: z.array(z.object({})).nullable(),
   userAuthentication: z.array(z.object({}).nullable()),
-  hasTermsVersion: z.string().min(1, { message: V.min }).max(32).nullable(),
+  hasTermsVersion: z.string().min(1).max(32).nullable(),
 })
   .strict()
   .transform(
@@ -58,5 +57,5 @@ export type User = z.infer<typeof UserSchema>;
 export type RelationUser = {
   user: User;
   address: Address | null;
-  terms: Terms | null;
+  terms: Term | null;
 };

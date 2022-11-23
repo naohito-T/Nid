@@ -2,7 +2,7 @@ import { Entity, Column, Index, OneToMany, OneToOne } from 'typeorm';
 import { BaseUProperties } from './_base';
 import { UserAddress } from './UserAddress';
 import { UserAuthentication } from './UserAuthentication';
-import { Terms } from './Terms';
+import { Term } from './Term';
 
 const UserComments = {
   firstName: '苗字',
@@ -68,18 +68,29 @@ export class User extends BaseUProperties {
     comment: UserComments.userAddress,
   })
   @OneToMany(() => UserAddress, (userAddress) => userAddress.userId, {
-    eager: true, // これで一緒に取るはず。Userを取れば一緒に住所テーブルも一回のクエリーで取れる
+    eager: true, // これで一緒に取るはず。Userを取れば一緒に住所テーブルも一回のクエリーで取れる（取得時にそのEntityも一緒に取得するかどうか。DB構造には影響しない。）
+    cascade: true,
+    orphanedRowAction: 'delete',
+    onDelete: 'CASCADE',
   })
   userAddress: string[] | null;
 
+  /**
+   * @see https://uyamazak.hatenablog.com/entry/2021/10/06/140909
+   */
   @Column('varchar', {
     name: 'user_authorization',
     array: true,
     comment: UserComments.userAuthorization,
   })
-  @OneToMany(() => UserAuthentication, (userAuthentication) => userAuthentication.userId)
+  @OneToMany(() => UserAuthentication, (userAuthentication) => userAuthentication.userId, {
+    cascade: true,
+    orphanedRowAction: 'delete',
+    onDelete: 'CASCADE',
+  })
   userAuthorization: UserAuthentication[];
 
+  // TODO これ違うかも
   @Column('timestamp', {
     name: 'has_terms_version',
     nullable: true,
@@ -87,6 +98,6 @@ export class User extends BaseUProperties {
     array: true,
     comment: UserComments.has_terms_version,
   })
-  @OneToOne(() => Terms, (terms) => terms.userId)
+  @OneToOne(() => Term, (term) => term.userId)
   hasTermsVersion: Date | null;
 }

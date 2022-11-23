@@ -96,11 +96,11 @@ export class BackendBase {
   ): Promise<Result<Awaited<Promise<T>>, ErrorResponse>> => {
     let count = 0;
     try {
+      fetchLogger.info({ msg: 'Post Start.', service: 'Backend' });
       const data = await this.axios.post<T>(path, { data: payload }).then((r) => r.data);
-      fetchLogger.info({ msg: 'Post Success', file: 'backend base' });
       return new Success(data);
     } catch (e: unknown) {
-      fetchLogger.info({ msg: 'Post Error', file: 'backend base' });
+      fetchLogger.info({ msg: 'Post Error', service: 'Backend' });
       if (Axios.isAxiosError(e)) {
         if (count === retry) {
           return new Failure(new ErrorResponse('backend base', e.status, e.code, e));

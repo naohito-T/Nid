@@ -1,24 +1,23 @@
-import { User, UserAddress, UserAuth, UserRole, SexType } from '@/db/entity';
 import { faker as F } from '@faker-js/faker/locale/ja';
 import { generateSex } from '@/__tests__/helper';
-import { UserSchemaType } from '@/schema';
+import { generateJaAddress } from './address';
+import { User, Address } from '@/schema';
 
-export const generateJaUser = (): UserSchemaType => {
+type CommonUser = Omit<User, 'id' | 'createdAt' | 'updatedAt'>;
+
+export const generateJaUser = (): CommonUser => {
   const sex = F.name.sexType();
-
-
-
-
-
-      F.name.firstName(sex),
-      F.name.lastName(sex),
-      F.datatype.number(100),
-      generateSex(sex),
-      F.name.firstName(sex),
-      F.phone.number(),
-
-  }
-
-
-  return user;
+  return {
+    firstName: F.name.firstName(sex),
+    lastName: F.name.lastName(sex),
+    birthDate: F.date.birthdate({ min: 18, max: 65 }).toString(),
+    sex: generateSex(sex),
+    nickName: F.name.firstName(sex),
+    telephoneNumber: F.phone.number(),
+    email: F.internet.email(),
+    thumbnailUrl: 'https://picsum.photos/300/200',
+    userAddress: [generateJaAddress()],
+    userAuthentication: null,
+    hasTermsVersion: null,
+  };
 };

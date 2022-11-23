@@ -1,7 +1,7 @@
 export * from './User';
 export * from './UserAddress';
 export * from './UserAuthentication';
-export * from './Terms';
+export * from './Term';
 export * from './_Role';
 
 /**

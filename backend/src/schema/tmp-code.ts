@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { validationMessages as V } from '@/libs/validations';
 
 /**
  * @desc console.log(new Date(0 * 1000));
@@ -7,8 +6,8 @@ import { validationMessages as V } from '@/libs/validations';
  */
 export const TmpCodeSchema = z
   .object({
-    tmpCode: z.string().min(1, { message: V.min }),
-    state: z.string().min(1, { message: V.min }),
+    tmpCode: z.string().min(1),
+    state: z.string().min(1),
   })
   .strict()
   .transform(async ({ tmpCode, state }) => ({

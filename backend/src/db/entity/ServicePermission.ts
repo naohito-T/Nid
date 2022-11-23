@@ -7,13 +7,14 @@ const UserAddressComment = {
 } as const;
 
 /**
- * @desc userのpermission
- * 連携していない時は読み込みの権限
- * 連携して場合は書き込みも与えられる。
+ * @desc 外部クライアントの権限
+ * - read
+ * - search（readと一緒じゃね？）
+ * - write
  *
  */
-@Entity('user_permissions')
-export class UserPermission extends BaseIProperties {
+@Entity('service_permissions')
+export class ServicePermission extends BaseIProperties {
   @Column('varchar', { name: 'public_key', length: 512 })
   publicKey: string;
 

@@ -13,4 +13,4 @@ export const SignValueScheme = z.object({
 // .refine()や.transform()を使った非同期スキーマを検証する場合、.parseAsync()を使って検証する必要があります。
 // Zod には、検証した値を別の値に変換するTransformerという機能がある。
 
-export type SignValueType = z.infer<typeof SignValueScheme>;
+export type SignValue = z.infer<typeof SignValueScheme>;

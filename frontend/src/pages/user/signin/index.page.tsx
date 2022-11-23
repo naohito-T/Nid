@@ -7,7 +7,7 @@ import { SignValueScheme } from '@/schema';
 import { SignInTpl, LayoutTpl } from '@/components/templates';
 import { BackendGuestResource } from '@/apis/resources/guest/backend.resource';
 
-import type { SignValueType } from '@/schema';
+import type { SignValue } from '@/schema';
 
 const Wrapper = styled.div``;
 
@@ -34,16 +34,16 @@ const SingIn: NextPage<Props> = ({ statusCode }) => {
   const [isProgress, setIsProgress] = useRecoilState(progressState);
 
   // validationをして成功であればprogressを外す
-  const onSubmit = async (signValue: SignValueType) => {
+  const onSubmit = async (signValue: SignValue) => {
     setIsProgress(true);
     // 検証
     const parsedSignValue = await SignValueScheme.parseAsync(signValue);
+
+    // TODO stateを作成しrecoilに保存
     const backendGuestResource = new BackendGuestResource();
-    console.log(`users`);
-    const user = await backendGuestResource.signIn(parsedSignValue);
-    // TODO useState or Recoil
+    const tmpCode = await backendGuestResource.signIn(parsedSignValue);
+
     await new Promise((r) => setTimeout(r, 5000)).finally(() => setIsProgress(false));
-    // console.log(`users ${users}`);
   };
 
   return (

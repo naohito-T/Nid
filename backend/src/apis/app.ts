@@ -97,8 +97,10 @@ export class Application {
 
     /** 未定義API */
     this.app.use(async (_, res) => {
-      await this.ds.destroy();
-      errorSerializer(res, NOT_FOUND.statusCode, NOT_FOUND.message);
+      // await this.ds.destroy();
+      errorSerializer(res, NOT_FOUND.statusCode, [
+        { message: NOT_FOUND.message, code: NOT_FOUND.statusCode },
+      ]);
     });
 
     process.on('unhandledRejection', (reason, p) => {

@@ -44,6 +44,6 @@ export class UserAuthentication extends BaseIProperties {
   readonly userId: string; // relationする
 
   @ManyToOne(() => User, (user) => user.userAuthorization) // relationを表現してい
-  @JoinColumn({ name: 'user_Id' }) // userIdがforeignキーとなることを表す。
+  @JoinColumn({ name: 'userId' }) // userIdがforeignキーとなることを表す。
   user: User;
 }

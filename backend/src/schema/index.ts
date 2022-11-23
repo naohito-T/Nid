@@ -1,6 +1,6 @@
 export * from './user';
 export * from './address';
-export * from './terms';
+export * from './term';
 export * from './authentication';
 export * from './sign-value';
 export * from './jwt';

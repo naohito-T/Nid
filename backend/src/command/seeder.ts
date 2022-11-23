@@ -27,8 +27,10 @@ export class Seeder {
 
   private dbSettings = async () => {
     try {
-      await AppDataSource.initialize();
-      this.isInitialized = this.ds.isInitialized;
+      this.ds = await AppDataSource.initialize().then((ds) => {
+        this.isInitialized = ds.isInitialized;
+        return ds;
+      });
     } catch (e: unknown) {
       if (e instanceof Error) {
         console.log('db error');
@@ -49,26 +51,35 @@ export class Seeder {
    * 新たにエンティティを加えたい場合は、新規のfixtureを作成しTasksSeederServiceに値を入れてください。
    */
   public async SeederStart() {
+    await this.dbSettings();
+    console.log(`DB initialized!! ${this.isInitialized}`);
+
     try {
-      this.dbSettings();
       await this.ds.transaction(async (t: EntityManager) => {
         // await Promise.all([t.insert(User, generateJaUser())])
         //   .then((_) => console.log('Complete! Seeder'))
         //   .finally(() => this.dbDestroy());
-        const userRepo = t.getRepository(User);
-        const newUser = userRepo.create({});
-
-        const persisted = await userRepo.save(newUser);
+        const userRepo = await t.getRepository(User);
+        await userRepo.save(userRepo.create(User));
       });
     } catch (e: unknown) {
       if (e instanceof Error) {
         console.log('Not Complete Seeder');
         console.log({ name: e.name, message: e.message });
       }
-      console.error(e);
-      throw new Error(e);
     }
   }
 }
 
 new Seeder().SeederStart();
+
+// await this.ds.manager.save(
+//   this.ds.manager.create(User, {
+//     first_name: 'Timber',
+//     last_name: 'Saw',
+//     age: 27,
+//     sex: SexType.female,
+//     nick_name: 'a',
+//     telephone_number: '03030303',
+//   }),
+// );

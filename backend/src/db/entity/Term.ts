@@ -14,15 +14,15 @@ const UserAddressComment = {
  *       削除はできないように
  */
 @Entity('terms')
-export class Terms extends BaseIProperties {
+export class Term extends BaseIProperties {
   @CreateDateColumn({
-    name: 'terms_version',
+    name: 'term_version',
     type: 'timestamp',
     precision: 3, // これなんだっけ
     nullable: true,
     comment: UserAddressComment.version,
   })
-  termsVersion: Date | null = null;
+  termVersion: Date | null = null;
 
   @Column('varchar', { name: 'user_id' })
   readonly userId: string;
@@ -30,9 +30,4 @@ export class Terms extends BaseIProperties {
   @OneToOne(() => User, (user) => user.hasTermsVersion) // relationを表現している。
   @JoinColumn({ name: 'userId' }) // userIdがforeignキーとなることを表す。
   user: User;
-
-  // constructor(userId: string) {
-  //   super();
-  //   this.user_id = userId;
-  // }
 }

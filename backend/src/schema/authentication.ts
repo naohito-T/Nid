@@ -1,11 +1,10 @@
 import { z } from 'zod';
 import { ICommonSchema } from './_common';
-import { validationMessages as V } from '@/libs/validations';
 
 export const AuthenticationSchema = ICommonSchema.extend({
   identityType: z.number().optional(),
   identifier: z.number().optional(),
-  password: z.string().min(1, { message: V.min }),
+  password: z.string().min(1),
   credential: z.number().optional(),
 })
   .strict()
