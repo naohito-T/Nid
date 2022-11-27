@@ -8,7 +8,8 @@ export class BackendBase {
   constructor() {
     // TODO backendへの通信は全てproxyさせるかは要検討
     // this.baseURL = process.env.FRONT_URL;
-    this.baseURL = process.env.BACKEND_API_URL;
+    // this.baseURL = process.env.BACKEND_API_URL;
+    this.baseURL = 'http://localhost:3100';
     this.axios = this.createBaseAxios();
   }
 

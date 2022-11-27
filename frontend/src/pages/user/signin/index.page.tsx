@@ -2,7 +2,7 @@ import type { NextPage, InferGetServerSidePropsType } from 'next';
 import Error from 'next/error';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { progressState } from '@/stores/common';
+import { progressState } from '@/contexts/common';
 import { SignValueScheme } from '@/schema';
 import { SignInTpl, LayoutTpl } from '@/components/templates';
 import { BackendGuestResource } from '@/apis/resources/guest/backend.resource';
@@ -41,8 +41,8 @@ const SingIn: NextPage<Props> = ({ statusCode }) => {
 
     // TODO stateを作成しrecoilに保存
     const backendGuestResource = new BackendGuestResource();
-    const tmpCode = await backendGuestResource.signIn(parsedSignValue);
-
+    const tmpCode = await backendGuestResource.signUp(parsedSignValue);
+    console.log(tmpCode);
     await new Promise((r) => setTimeout(r, 5000)).finally(() => setIsProgress(false));
   };
 

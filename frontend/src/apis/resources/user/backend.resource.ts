@@ -1,6 +1,6 @@
 import { BackendBase } from '@/apis/services/backend';
 import type { IUserResource } from '@/apis/interfaces/user';
-import type { UserType } from '@/schema';
+import type { User } from '@/schema';
 import { UserRouter } from '@/configs';
 
 /**
@@ -11,9 +11,9 @@ export class BackendUserResource extends BackendBase implements IUserResource {
     super();
   }
 
-  public fetchMe = async (token: string): Promise<UserType> => {
+  public fetchMe = async (token: string): Promise<User> => {
     const headers = { Authorization: `Bearer ${token}` };
-    const me = await this.get<UserType>(UserRouter.me, headers);
+    const me = await this.get<User>(UserRouter.me, headers);
     if (me.isSuccess()) {
       return me.getSuccessValue();
     } else {

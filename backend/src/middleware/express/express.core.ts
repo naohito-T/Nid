@@ -31,10 +31,14 @@ export interface TypedRequest<T extends Query, U> extends Request {
 }
 
 interface ErrorResponse {
-  errors: Array<{
+  errors: {
+    // messageはen（フロントではenをjaにする）
     message: string;
-    code?: number;
-  }>;
+    // 開発者コード（ドキュメントとかで整理する）
+    code?: string;
+    // ex.
+    issue?: any;
+  }[];
 }
 
 export interface TypedResponse<ResBody> extends Response {

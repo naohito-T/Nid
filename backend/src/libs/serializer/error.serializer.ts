@@ -1,5 +1,10 @@
 import { TypedResponse } from '@/middleware/express';
 
+type ErrorResMessages = {
+  message: string;
+  code?: string;
+}[];
+
 /**
  * @see https://labs.goo.ne.jp/api_error_info/
  * @desc errorレスポンスのシリアライザー
@@ -9,7 +14,7 @@ export const errorSerializer = <T>(
   // headerに入る。
   statusCode: number,
   // bodyに入る。
-  errors: { message: string; code?: number }[],
-) => {
+  errors: ErrorResMessages,
+): void => {
   res.status(statusCode).json({ errors: errors });
 };

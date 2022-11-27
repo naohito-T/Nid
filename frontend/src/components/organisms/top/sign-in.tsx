@@ -2,7 +2,7 @@ import type { NextComponentType, NextPageContext } from 'next';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { SignValueType } from '@/schema';
+import type { SignValue } from '@/schema';
 import { SignValueScheme } from '@/schema';
 
 import Avatar from '@mui/material/Avatar';
@@ -18,7 +18,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 
 type Props = {
-  onSubmit: (singValue: SignValueType) => Promise<void>;
+  onSubmit: (singValue: SignValue) => Promise<void>;
 };
 
 /** 全体の設定 */
@@ -31,7 +31,7 @@ export const SignIn: NextComponentType<NextPageContext, null, Props> = ({ onSubm
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<SignValueType>({
+  } = useForm<SignValue>({
     resolver: zodResolver(SignValueScheme),
   });
 

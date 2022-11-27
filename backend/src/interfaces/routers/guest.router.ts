@@ -2,7 +2,7 @@ import express from 'express';
 import type { Router } from 'express-serve-static-core';
 import { GuestEndpoints } from '@/configs';
 import { GuestController } from '@/interfaces/controllers';
-import { signValidation } from '@/libs/validations';
+import { SignHandler } from '@/libs/handlers/guest';
 
 export const guestRouter = (): Router => {
   // エラーログのアップロード
@@ -34,13 +34,14 @@ export const guestRouter = (): Router => {
 
   router.get('/logout', (req, res) => {
     // セッションを破棄
-    req.session.destroy((err) => {
+    req.session.destroy((_) => {
       res.send('logout');
     });
   });
 
-  router.post(GuestEndpoints.signUp, signValidation, guestController.signUp);
-  router.post(GuestEndpoints.signIn, signValidation, guestController.signIn);
+  // router.post(GuestEndpoints.signUp, handler);
+  router.post(GuestEndpoints.signUp, SignHandler);
+  // router.post(GuestEndpoints.signIn, signValidation, guestController.signIn);
 
   return router;
 };

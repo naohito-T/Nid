@@ -1,20 +1,23 @@
 import express from 'express';
-import cors from 'cors';
-import cookieParser from 'cookie-parser';
 import { DataSource } from 'typeorm';
 import { AppDataSource } from '@/db/setting/db.setting';
-import { corsOptions } from '@/middleware/cors';
-import { setupSession } from '@/middleware/session';
-import { setupLogger, messageLogger } from '@/middleware/logger';
+import { messageLogger } from '@/middleware/logger';
 import { limiter } from '@/middleware/rate';
 import { guestRouter } from '@/interfaces/routers';
 import { commonVersionPath } from '@/configs';
 import { errorSerializer } from '@/libs/serializer';
-import { NOT_FOUND } from '@/libs/errors';
+import {
+  NOT_FOUND,
+  SetupDBError,
+  UN_DB_SETUP,
+  SetupMiddlewareError,
+  UN_MIDDLEWARE_SETUP,
+} from '@/libs/errors';
+import { settingCommonMiddleware } from '@/middleware/app.bundle';
 
 export class Application {
   private app: express.Express;
-  private ds: DataSource;
+  private ds: DataSource | undefined;
   private isTest: boolean;
   private isDBInitialized: boolean;
 
@@ -22,6 +25,7 @@ export class Application {
     this.app = express();
     this.isTest = isTest;
     this.isDBInitialized = isDBInitialized;
+    this.ds = undefined;
   }
 
   public get getApp() {
@@ -31,8 +35,11 @@ export class Application {
   public setup = async () => {
     // TODO DIで注入できたらいいね。
     // @see https://typeorm.io/data-source
+    messageLogger.debug({ msg: 'DB Start.' });
     await this.settingDatabase();
+    messageLogger.debug({ msg: 'Middleware Start.' });
     await this.settingCommonMiddleware();
+    messageLogger.debug({ msg: 'Launch App Start.' });
     await this.launchApp();
   };
 
@@ -41,16 +48,14 @@ export class Application {
    */
   private settingDatabase = async () => {
     // testモードではなくdbが起動していない場合
-    messageLogger.debug({ msg: 'DB Start.' });
     if (!this.isTest && !this.isDBInitialized) {
       try {
         this.ds = await AppDataSource.initialize();
         // 起動フラグを配置する。
         this.isDBInitialized = this.ds.isInitialized;
-        messageLogger.debug({ msg: 'Finish setup to db.' });
       } catch (e: unknown) {
         messageLogger.error(e);
-        throw new Error('db setup error');
+        throw new SetupDBError(UN_DB_SETUP.message, UN_DB_SETUP.statusCode);
       }
     }
   };
@@ -59,26 +64,34 @@ export class Application {
    * @desc どのRouterにも適用するmiddleware
    */
   private settingCommonMiddleware = async () => {
-    await messageLogger.debug({ msg: 'Middleware Start.' });
     try {
-      // cors
-      this.app.use(cors(corsOptions));
-      // post対応（json parser）
-      this.app.use(express.json());
-      // session
-      this.app.use(setupSession());
-      // Parse Cookie
-      this.app.use(cookieParser());
-      // log
-      const [expressPino] = setupLogger();
-      this.app.use(expressPino);
-      messageLogger.info({ msg: 'Finish setup to middleware' });
+      /**
+       * @see https://qiita.com/qianer-fengtian/items/148602c437e1703aa764
+       * @desc helmet
+       * @todo ウェブセキュリティを受ける。
+       */
+      // this.app.use(helmet());
+      // // cors
+      // this.app.use(cors(corsOptions));
+      // // post対応（json parser）
+      // this.app.use(express.json());
+      // // session
+      // this.app.use(setupSession());
+      // // Parse Cookie
+      // this.app.use(cookieParser());
+      // // log
+      // const [expressPino] = setupLogger();
+      // this.app.use(expressPino);
+      await settingCommonMiddleware(this.app);
     } catch (e: unknown) {
       messageLogger.error(e);
-      throw new Error('middleware error');
+      throw new SetupMiddlewareError(UN_MIDDLEWARE_SETUP.message, UN_MIDDLEWARE_SETUP.statusCode);
     }
   };
 
+  /**
+   * @desc Start Setup Router
+   */
   private setupRouter = async () => {
     /**
      * @desc pathごとにrate limitかける
@@ -91,18 +104,21 @@ export class Application {
    * @desc Start App
    */
   private launchApp = async () => {
-    // register express routes from defined application routes
-    messageLogger.debug({ msg: 'Launch App Start.' });
     await this.setupRouter();
 
-    /** 未定義API */
+    /**
+     * @desc 未定義API
+     */
     this.app.use(async (_, res) => {
       // await this.ds.destroy();
       errorSerializer(res, NOT_FOUND.statusCode, [
-        { message: NOT_FOUND.message, code: NOT_FOUND.statusCode },
+        { message: NOT_FOUND.message, code: NOT_FOUND.code },
       ]);
     });
 
+    /**
+     * @desc catchされずに残るエラーをここで吸収
+     */
     process.on('unhandledRejection', (reason, p) => {
       // this.ds.destroy();
       console.error('ハンドルされていない例外 at: Promise', p, 'reason:', reason);

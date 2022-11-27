@@ -1,0 +1,53 @@
+name: TypeCheck
+
+on:
+  workflow_dispatch:
+    inputs:
+      stage:
+        type: choice
+        required: true
+        description: "dev or stg or prod"
+        default: "dev"
+        options:
+          - "dev"
+          - "stg"
+          - "prod"
+      flag:
+        # このchoiceは？
+        type: choice
+        required: true
+        description: "backend or frontend"
+        default: "frontend"
+        options:
+          - "frontend"
+          - "backend"
+
+  pull_request:
+    paths:
+      - "frontend/**"
+
+jobs:
+  tsc:
+    strategy:
+      matrix:
+        node-version: [16.17.0]
+        os: [ubuntu-22.04]
+
+    runs-on: ${{ matrix.os }}
+
+    # defaults:
+    #   run:
+    #     working-directory: infra
+    steps:
+      - uses: actions/checkout@v3
+
+      - id: setup_node
+        uses: ./.github/workflows/composite/setup_node
+        with:
+          name: ${{ matrix.node-version }}
+
+      - name: Type check
+        working-directory: frontend
+        run: |
+          yarn
+          yarn tsc

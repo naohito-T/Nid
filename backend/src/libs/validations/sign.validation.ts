@@ -1,5 +1,5 @@
 import { Response, NextFunction } from 'express';
-import { signScheme, SignValue } from '@/schema';
+import { SignValueScheme, SignValue } from '@/schema';
 import { ZodError } from 'zod';
 import { TypedRequestBody } from '@/middleware/express';
 
@@ -13,29 +13,16 @@ export const signValidation = async (
 ) => {
   try {
     // validationしたemail&加工したpassword
-    const transReq = await signScheme.parseAsync(req.body);
+    const transReq = await SignValueScheme.parseAsync(req.body);
     // WORKAROUND これでいいの？
     req.body.email = transReq.email;
     req.body.password = transReq.password;
     next();
   } catch (e: unknown) {
     if (e instanceof ZodError) {
+      throw new Error();
     } else {
       throw new Error('予期せぬエラー');
     }
   }
 };
-
-// バリデーションエラーはこんな感じ
-// {
-//   "issues": [
-//     {
-//       "validation": "email",
-//       "code": "invalid_string",
-//       "message": "Invalid email",
-//       "path": [
-//         "mailAddress"
-//       ]
-//     }
-//   ],//   "name": "ZodError"
-// }

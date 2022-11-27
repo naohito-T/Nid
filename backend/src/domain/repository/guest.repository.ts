@@ -8,7 +8,7 @@ import { SignValue } from '@/schema';
  * オリジナルから汎用的なメソッドを作成
  */
 interface CustomGuestRepository {
-  findByName: (firstName: string, lastName: string) => Promise<User>;
+  // findByName: (firstName: string, lastName: string) => Promise<User>;
   findByEmail: (email: string) => Promise<boolean>;
   // registerNewUser: (signValue: SignValue) => Promise<User>;
 }
@@ -18,10 +18,10 @@ interface CustomGuestRepository {
  */
 export const GuestRepository = AppDataSource.getRepository(User).extend<CustomGuestRepository>({
   /** @desc email with name */
-  async findByName(firstName: string, lastName: string): Promise<User> {
-    const user = (await this.findBy()) as Promise<User>;
-    return user;
-  },
+  // async findByName(firstName: string, lastName: string): Promise<User> {
+  //   const user = (await this.findBy()) as Promise<User>;
+  //   return user;
+  // },
 
   async findByEmail(email: string): Promise<boolean> {
     const user = await GuestRepository.findOne({ where: { email } });

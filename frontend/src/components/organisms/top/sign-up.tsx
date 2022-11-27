@@ -2,7 +2,7 @@ import type { NextComponentType, NextPageContext } from 'next';
 import styled from 'styled-components';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { SignValueType } from '@/schema';
+import type { SignValue } from '@/schema';
 import { SingValueScheme } from '@/schema';
 
 import * as React from 'react';
@@ -17,13 +17,11 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 
 type Props = {
   // login or singUp
-  onSubmit: (singValue: SignValueType) => Promise<void>;
+  onSubmit: (singValue: SignValue) => Promise<void>;
 };
 
 /** 全体の設定 */
@@ -36,11 +34,11 @@ export const SingUp: NextComponentType<NextPageContext, null, Props> = ({}) => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<SignValueType>({
+  } = useForm<SignValue>({
     resolver: zodResolver(SingValueScheme),
   });
 
-  const onSubmit: SubmitHandler<SignValueType> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<SignValue> = (data) => console.log(data);
   const errorEmail = errors.email?.message as string;
   const errorPassword = errors.password?.message as string;
 

@@ -19,7 +19,7 @@ initDynamoDB() {
 
 
 # log load
-. ./bin/info
+. ./bin/logger
 
 # &&だと失敗した時点で止まるため便利
 info 'Start AWS Local kits.' \

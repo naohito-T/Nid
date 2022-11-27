@@ -11,7 +11,7 @@ services:
       - "3100:3100"
     volumes:
       - .:/app:cached
-      # Volume Trickというテクニック（parrotのbundleもそう）
+      # Volume Trick
       - nid-node-modules:/app/node_modules
     env_file: $PWD/env/local/.env
     depends_on:
@@ -52,6 +52,7 @@ services:
     environment:
       # 有効にするサービス
       LOCALSTACK_SERVICES: dynamodb,s3,ses,sqs
+      # LOCALSTACK_SERVICES: apigateway,lambda,dynamodb,s3,iam,sts,cloudformation
       DEFAULT_REGION: ap-northeast-1
       USE_LIGHT_IMAGE: 1
       SKIP_INFRA_DOWNLOADS: 1

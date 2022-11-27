@@ -14,7 +14,7 @@ export class BackendGuestResource extends BackendBase implements IGuestBackendRe
 
   public signUp = async (signValue: SignValue): Promise<TmpToken> => {
     const state = '';
-
+    console.log(`sign up${GuestRouter.signUp}`);
     const tmpCode = await this.post<TmpToken, SignValue & { state: string }>(GuestRouter.signUp, {
       email: signValue.email,
       password: signValue.password,
@@ -25,7 +25,6 @@ export class BackendGuestResource extends BackendBase implements IGuestBackendRe
     } else {
       const { functionName, statusCode, code, error } = tmpCode.getErrorValue();
       this.interceptLogs(functionName, statusCode, code);
-      throw error;
     }
   };
 

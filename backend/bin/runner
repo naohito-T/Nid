@@ -10,7 +10,7 @@ set -eu pipefail
 # seeds
 
 # log load
-. ./bin/info
+. ./bin/logger
 
 if [[ "${NODE_ENV}" == "local" || "${NODE_ENV}" == "development" ]]; then
     # TODO migrationを入れる。

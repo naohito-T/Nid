@@ -1,20 +1,28 @@
 {
+  // "extends": "./tsconfig.paths.json",
   "compilerOptions": {
     "lib": [
-      "es5",
-      "es6"
+      "ES5",
+      "ES6"
     ],
-    "target": "es6",
+    "target": "ES6",
     "module": "commonjs",
     "moduleResolution": "node",
+    // "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "removeComments": true,
+    // TypeORMを使用するための必須option
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    // "strict": true,
-    // https://numb86-tech.hatenablog.com/entry/2020/07/11/160159
+    // esbuildのために記載
+    "isolatedModules": true,
     "esModuleInterop": true,
+    // "strict": true,
+    "allowSyntheticDefaultImports": true,
+    // https://numb86-tech.hatenablog.com/entry/2020/07/11/160159
     "sourceMap": true,
     "baseUrl": "./",
-    "outDir": "./build",
+    "outDir": "./dist",
     "paths": {
       "@/*": [
         "src/*"
@@ -27,5 +35,13 @@
       "node_modules/@types",
       "src/@types"
     ],
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": [
+    "node_modules/**/*",
+    ".serverless/**/*",
+  ],
+  "ts-node": {
+    "require": ["tsconfig-paths/register"]
   }
 }

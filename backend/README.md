@@ -24,13 +24,16 @@ dbを完全な状態で起動しないといけない。
 1. イメージをビルドする。
 `$ build`
 
-2. マイグレーションを実行する（migrationフォルダーに作成される）
+2. volumeにnode_modulesをinstallする
+`$ run yarn install`
+
+3. マイグレーションを実行する（migrationフォルダーに配置されているファイルに対して実行）
 `$ run yarn m:up`
 
-3. dbにseedする
+4. dbにseedする
 `$ run yarn seed`
 
-4. アプリケーションを起動する
+5. アプリケーションを起動する
 `$ up`
 
 ## Tips

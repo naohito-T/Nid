@@ -26,10 +26,10 @@ const RoleComments = {
 
 @Entity('roles')
 export class Role extends BaseIProperties {
-  @Column({ name: 'user_id' })
+  @Column('varchar', { name: 'user_id' })
   readonly userId: string;
 
-  @Column({
+  @Column('number', {
     name: 'role',
     type: 'enum',
     enum: RoleType,
