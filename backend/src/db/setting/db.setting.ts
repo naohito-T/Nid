@@ -22,15 +22,15 @@ export const AppDataSource = new DataSource({
   migrations: ['src/db/migration/*.ts'],
 });
 
-export const TestDataSource = new DataSource({
-  type: 'postgres',
-  host: process.env.TYPEORM_HOST,
-  port: Number(process.env.TYPEORM_PORT),
-  username: process.env.TYPEORM_USER,
-  password: process.env.TYPEORM_PASS,
-  database: 'nid-test',
-  synchronize: false,
-  logging: true,
-  entities: [User, UserAddress, UserAuthentication, Term],
-  migrations: ['src/db/migration/*.ts'],
-});
+// export const TestDataSource = new DataSource({
+//   type: 'postgres',
+//   host: process.env.TYPEORM_HOST,
+//   port: Number(process.env.TYPEORM_PORT),
+//   username: process.env.TYPEORM_USER,
+//   password: process.env.TYPEORM_PASS,
+//   database: 'nid-test',
+//   synchronize: false,
+//   logging: true,
+//   entities: [User, UserAddress, UserAuthentication, Term],
+//   migrations: ['src/db/migration/*.ts'],
+// });

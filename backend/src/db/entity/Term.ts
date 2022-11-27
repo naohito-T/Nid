@@ -22,12 +22,12 @@ export class Term extends BaseIProperties {
     nullable: true,
     comment: UserAddressComment.version,
   })
-  termVersion: Date | null = null;
+  termVersion: string;
 
-  @Column('varchar', { name: 'user_id' })
-  readonly userId: string;
-  // @JoinColumnデコレーターはリレーションの一方の側でのみ使用する必要があることに注意してください。このデコレーターをどちら側に配置しても、関係の所有側になります。リレーションシップの所有側には、データベース内の外部キーを持つ列が含まれています。
-  @OneToOne(() => User, (user) => user.hasTermsVersion) // relationを表現している。
-  @JoinColumn({ name: 'userId' }) // userIdがforeignキーとなることを表す。
+  // @Column('varchar', { name: 'user_id' })
+  // readonly userId: string;
+  // // @JoinColumnデコレーターはリレーションの一方の側でのみ使用する必要があることに注意してください。このデコレーターをどちら側に配置しても、関係の所有側になります。リレーションシップの所有側には、データベース内の外部キーを持つ列が含まれています。
+  @OneToOne(() => User, (user) => user.hasTermVersion) // relationを表現している。
+  @JoinColumn()
   user: User;
 }

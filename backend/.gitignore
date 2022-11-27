@@ -10,3 +10,4 @@ env/**/*env
 # esbuild directories
 .esbuild
 dist
+tmp

@@ -39,9 +39,13 @@ export class UserAddress extends BaseIProperties {
   building: string | null;
 
   @Column('varchar', { name: 'user_id' })
-  readonly userId: string;
+  userId: string;
   // @JoinColumnデコレーターはリレーションの一方の側でのみ使用する必要があることに注意してください。このデコレーターをどちら側に配置しても、関係の所有側になります。リレーションシップの所有側には、データベース内の外部キーを持つ列が含まれています。
   @ManyToOne(() => User, (user) => user.userAddress) // relationを表現してい
-  @JoinColumn({ name: 'userId' }) // userIdがforeignキーとなることを表す。
+  @JoinColumn({ name: 'user_Id' }) // userIdがforeignキーとなることを表す。
   user: User;
+
+  constructor() {
+    super();
+  }
 }

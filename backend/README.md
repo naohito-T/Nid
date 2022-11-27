@@ -31,9 +31,9 @@ dbを完全な状態で起動しないといけない。
 `$ run yarn m:up`
 
 4. dbにseedする
-`$ run yarn seed`
+`$ run yarn s:run`
 
-5. アプリケーションを起動する
+1. アプリケーションを起動する
 `$ up`
 
 ## Tips
@@ -48,4 +48,5 @@ dbを完全な状態で起動しないといけない。
 - マイグレーションをリバートしたい時
 `$ run yarn m:down`
 
-- db自体をdropする。
+- table自体をdropする
+`run yarn m:drop`

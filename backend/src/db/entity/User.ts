@@ -67,14 +67,14 @@ export class User extends BaseUProperties {
     array: true,
     comment: UserComments.userAddress,
   })
-  @OneToMany(() => UserAddress, (userAddress) => userAddress.userId, {
+  @OneToMany(() => UserAddress, (userAddress) => userAddress.user, {
     eager: true, // これで一緒に取るはず。Userを取れば一緒に住所テーブルも一回のクエリーで取れる（取得時にそのEntityも一緒に取得するかどうか。DB構造には影響しない。）
     cascade: true,
     orphanedRowAction: 'delete',
     onDelete: 'CASCADE',
   })
-  userAddress: string[] | null;
-
+  userAddress: UserAddress[] | null;
+  // @OneToMany((type) => Pet, (pet) => pet.user) pets: Pet[]
   /**
    * @see https://uyamazak.hatenablog.com/entry/2021/10/06/140909
    */
@@ -91,13 +91,23 @@ export class User extends BaseUProperties {
   userAuthorization: UserAuthentication[];
 
   // TODO これ違うかも
+  // @Column('timestamp', {
+  //   name: 'has_terms_version',
+  //   nullable: true,
+  //   default: null,
+  //   array: true,
+  //   comment: UserComments.has_terms_version,
+  // })
+  // @OneToOne(() => Term, (term) => term.termVersion)
+  // hasTermsVersion: string | null;
+
   @Column('timestamp', {
-    name: 'has_terms_version',
+    name: 'has_term_version',
     nullable: true,
     default: null,
     array: true,
     comment: UserComments.has_terms_version,
   })
-  @OneToOne(() => Term, (term) => term.userId)
-  hasTermsVersion: Date | null;
+  @OneToOne(() => Term, (term) => term.termVersion)
+  hasTermVersion: string | null;
 }

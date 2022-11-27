@@ -28,11 +28,8 @@
     "m:up": "yarn orm:local migration:run -d src/db/setting/db.setting.ts",
     "m:down": "yarn orm:local migration:revert -d src/db/setting/db.setting.ts",
     "m:drop": "yarn orm:local schema:drop -d src/db/setting/db.setting.ts",
-    "seed": "yarn ts src/command/seeder.ts",
-    "seed2": "esbuild src/command/seeder.ts",
-
-    "seed:config": "yarn ts ./node_modules/typeorm-seeding/dist/cli.js config -n ",
-    "seed:run": "yarn ts ./node_modules/typeorm-seeding/dist/cli.js seed -n src/db/setting/ormconfig.ts",
+    "s:config": "yarn ts ./node_modules/typeorm-seeding/dist/cli.js config -n ",
+    "s:run": "yarn ts ./node_modules/typeorm-seeding/dist/cli.js seed -n src/db/setting/ormconfig.ts",
     "show": "yarn orm:local migration:show -d src/db/setting/db.setting.ts",
     "format": "prettier -w './src/**/*.{js,ts,json}'",
     "deploy": "sls deploy -r ap-northeast-1",
