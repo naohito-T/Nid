@@ -1,19 +1,18 @@
 version: '3.8'
 services:
-  # appはコマンドでstartさせる
-  # dbをmigrationかける
-  # dbにseedを入れる
-  # watchでstartする
   app:
     build:
       context: $PWD
       dockerfile: $PWD/docker/Dockerfile.local
     # For M1 only. other environments comment out.
     platform: linux/amd64
+    working_dir: /app
     ports:
       - "3100:3100"
     volumes:
       - .:/app:cached
+      # Volume Trick
+      - nid-node-modules:/app/node_modules
     env_file: $PWD/env/local/.env
     depends_on:
       # @see https://gotohayato.com/content/533/
@@ -25,15 +24,16 @@ services:
   db:
     image: postgres:12
     ports:
-      - "5432:5432"
+      - "15432:5432"
+    # @see https://zenn.dev/re24_1986/articles/b76c3fd8f76aec
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: "test"
+      POSTGRES_DB: "nid"
       # これなかったら気になる。
       POSTGRES_INITDB_ARGS: '--encoding=UTF-8'
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - nid-db-data:/var/lib/postgresql/data
     # 指定しておくとコンテナ停止時にサービスが再起動してくれる。
     restart: always
     healthcheck:
@@ -48,10 +48,11 @@ services:
       - "24566:4566" # すべてのサービスポート
     volumes:
       # データのマウント
-      - 'localstack-data:/tmp/localstack'
+      - 'nid-localstack-data:/tmp/localstack'
     environment:
       # 有効にするサービス
       LOCALSTACK_SERVICES: dynamodb,s3,ses,sqs
+      # LOCALSTACK_SERVICES: apigateway,lambda,dynamodb,s3,iam,sts,cloudformation
       DEFAULT_REGION: ap-northeast-1
       USE_LIGHT_IMAGE: 1
       SKIP_INFRA_DOWNLOADS: 1
@@ -64,6 +65,6 @@ services:
       retries: 5
 
 volumes:
-  # TODO 以下の記入について調べる（おそらく作成するだけでいい場合の最低構文）
-  db-data: {}
-  localstack-data: {}
+  nid-node-modules: {}
+  nid-db-data: {}
+  nid-localstack-data: {}

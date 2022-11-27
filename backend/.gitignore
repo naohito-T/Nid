@@ -5,3 +5,9 @@ build/
 tmp/
 temp/
 env/**/*env
+# Serverless directories
+.serverless
+# esbuild directories
+.esbuild
+dist
+tmp

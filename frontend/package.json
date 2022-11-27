@@ -10,19 +10,33 @@
     "npm": "^8.15.0"
   },
   "scripts": {
-    "dev": "next dev -p 2100",
+    "dev": "FORCE_COLOR=true next dev -p 2100 | pino-pretty -tc",
+    "tsc": "tsc --noEmit",
     "build": "next build",
-    "start": "next start",
+    "start": "FORCE_COLOR=true next start -p 2100 | pino-pretty -tc",
     "lint": "next lint",
     "format": "prettier -w './src/**/*.{js,jsx,ts,tsx,json}'"
   },
   "dependencies": {
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
+    "@hookform/resolvers": "^2.9.10",
+    "@mui/icons-material": "^5.10.9",
+    "@mui/material": "^5.10.12",
     "@sentry/nextjs": "^7.15.0",
     "@types/styled-components": "^5.1.26",
+    "axios": "^1.1.3",
     "next": "12.3.1",
+    "next-http-proxy-middleware": "^1.2.5",
+    "pino": "^8.7.0",
+    "pino-pretty": "^9.1.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "styled-components": "^5.3.6"
+    "react-hook-form": "^7.39.1",
+    "recharts": "^2.1.16",
+    "recoil": "^0.7.6",
+    "styled-components": "^5.3.6",
+    "zod": "^3.19.1"
   },
   "devDependencies": {
     "@types/node": "18.8.3",

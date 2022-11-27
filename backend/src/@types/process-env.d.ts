@@ -2,7 +2,7 @@
 
 declare namespace NodeJS {
   interface ProcessEnv {
-    readonly NODE_ENV: 'local' | 'development' | 'production' | 'job' | 'test';
+    readonly NODE_ENV: 'development' | 'production' | 'job' | 'test';
     readonly CORS_ALLOW_ORIGIN: string;
     readonly SESSION_SECRET_KEY: string;
     readonly TYPEORM_HOST: string;

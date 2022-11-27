@@ -1,0 +1,98 @@
+' ' 主キーは右側に配置されるように
+' ' 外部キーは左側に配置されるように
+
+' @startuml nid-table
+
+' entity "users" as users {
+'   id
+'   --
+'   created_at
+'   updated_at
+'   first_name
+'   last_name
+'   birth_date
+'   sex
+'   nick_name
+'   telephone_number
+'   email
+'   thumbnail_url
+'   family_id<<FK>>
+' }
+
+' entity "user_addresses" as user_addresses {
+'   id
+'   --
+'   created_at
+'   updated_at
+'   user_id<<FK>>
+
+' }
+
+' @enduml
+
+
+@startuml tables
+entity users as "users\nユーザテーブル" {
+  + id [主キー]
+  --
+  created_at [作成日]
+  updated_at [更新日]
+  first_name [苗字]
+  last_name [名前]
+  birth_date [誕生日]
+  sex [性別]
+  nick_name [ニックネーム]
+  telephone_number [電話番号]
+  email [メールアドレス]
+  thumbnail_url [サムネイル]
+}
+
+entity positions as "positions\n役職マスタ" {
+  + id [PK]
+  --
+  company_id
+  name [役職名]
+  created_at [作成日]
+  updated_at [更新日]
+}
+
+' entity user_positions as "user_positions\nユーザー役職マスタ関連" {
+'   + id [PK]
+'   --
+'   user_id
+'   position_id
+'   created_at [作成日]
+'   updated_at [更新日]
+' }
+
+' entity users as "users\nユーザー" {
+'   + id [PK]
+'   --
+'   company_id
+'   login_id [ログインID]
+'   password [パスワード]
+'   created_at [作成日]
+'   updated_at [更新日]
+' }
+
+' entity user_profiles as "user_profiles\nユーザー詳細" {
+'   + id [PK]
+'   --
+'   user_id
+'   birthday[生年月日]
+'   name [ユーザー名]
+'   created_at [作成日]
+'   updated_at [更新日]
+' }
+
+' entity user_subordinate_users as "user_subordinate_users\nユーザー部下ユーザー関連" {
+'   + id [PK]
+'   --
+'   user_id
+'   subordinate_user_id [部下ユーザーID]
+'   password [パスワード]
+'   created_at [作成日]
+'   updated_at [更新日]
+' }
+
+@enduml

@@ -1,0 +1,121 @@
+openapi: 3.1.0
+info:
+  title: Nid API仕様書
+  version: '1.0'
+  summary: Nid API仕様書
+  description: Nid API設計書。外部クライアントに対しLoginを提供する。
+  contact:
+    name: Nid API Support
+  license:
+    name: MIT
+    identifier: MIT
+servers:
+  - url: 'https://example.com/api/v1'
+    description: プロダクション API
+  - url: 'http://{host}:{port}/api/v1'
+    description: 開発用
+    variables:
+      host:
+        default: localhost
+      port:
+        default: '3000'
+tags:
+  - name: api
+    description: Nid API プレフィックス
+  - name: v1
+    description: v1エンドポイント
+  - name: health
+    description: バックエンドのヘルスチェック用API
+  - name: users
+    description: users関連エンドポイント
+paths:
+  /health:
+    get:
+      operationId: get-health_check
+      summary: Nid API ヘルスチェック
+      description: 後続のDBに対し select 1; を投げて成功すれば 204 No Content を返す。失敗すれば Internal Server Error を返す。
+      tags:
+        - health
+      responses:
+        '200':
+          description: サーバーは正常に動作しています
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/get_health_response'
+      security: []
+  '/users/{user_id}':
+    get:
+      tags:
+        - api
+        - v1
+        - users
+      summary: ユーザ情報を取得する
+      description: ユーザ情報を取得する
+      parameters:
+        - name: user_id
+          in: path
+          description: 取得対象のユーザー ID
+          required: true
+          schema:
+            $ref: '#/components/schemas/user_id'
+components:
+  schemas:
+    get_health_response:
+      description: サーバーの状態のレスポンス
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - ok
+      required:
+        - status
+    user_id:
+      description: ユーザー識別子（これULIDにするかも）
+      type: string
+      pattern: '[a-zA-Z0-9_-]+'
+      maxLength: 127
+      example: halhorn
+      readOnly: true
+    User:
+      title: User
+      description: Nidで発行されるUser
+      required: [id, sec]
+      type: object
+      examples:
+        - id: 142
+          firstName: Alice
+          lastName: Smith
+          email: alice.smith@gmail.com
+          dateOfBirth: '1997-10-31'
+          emailVerified: true
+          signUpDate: '2019-08-24'
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the given user.
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        dateOfBirth:
+          type: string
+          format: date
+          example: '1997-10-31'
+        emailVerified:
+          type: boolean
+          description: Set to true if the user's email has been verified.
+        createDate:
+          type: string
+          format: date
+          description: The date that the user was created.
+      required:
+        - id
+        - firstName
+        - lastName
+        - email
+        - emailVerified

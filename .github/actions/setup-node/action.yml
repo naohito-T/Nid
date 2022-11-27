@@ -1,0 +1,36 @@
+# 他のActionをuse不可能なことだけ注意が必要
+
+name: 'Install Setup Node'
+description: 'dependencies install node_modules step'
+inputs:
+  node-version:
+    description: 'Specified node version'
+    required: true
+    default: "16.17.0"
+
+runs:
+  using: "composite"
+  steps:
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ inputs.node-version }}
+
+      - name: Before cache
+        run: mkdir -p ~/.cache/yarn
+        shell: bash
+
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        id: cache-node
+        with:
+          path: ~/.cache/yarn
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+            ${{ runner.os }}-
+
+      - name: Cache hit check.
+        run: echo "cache-node-->${{steps.cache-node.outputs.cache-hit}}<--"
+        shell: bash
+

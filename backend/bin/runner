@@ -10,7 +10,7 @@ set -eu pipefail
 # seeds
 
 # log load
-. ./bin/info
+. ./bin/logger
 
 if [[ "${NODE_ENV}" == "local" || "${NODE_ENV}" == "development" ]]; then
     # TODO migrationを入れる。
@@ -18,7 +18,6 @@ if [[ "${NODE_ENV}" == "local" || "${NODE_ENV}" == "development" ]]; then
     && . ./bin/aws-local-kit \
     && yarn dev
 else
-    info 'Dev app initialized.'
-    echo 'Prd app initialized.'
-    yarn dev
+    info 'Prd app initialized.' \
+    && yarn dev
 fi

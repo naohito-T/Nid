@@ -1,27 +1,67 @@
-import type { InferGetServerSidePropsType, NextPage } from 'next';
+import type { NextPage, InferGetServerSidePropsType } from 'next';
+import Error from 'next/error';
 import styled from 'styled-components';
-import { displayFlex } from '@/styles/styled-components';
-import { Button } from '@/components/atoms/button';
-import { User } from '@/@types/model';
-import { GuestResource } from '@/apis/resources/guest';
+import { TopTpl } from '@/components/templates';
+import { BackendGuestResource } from '@/apis/resources/guest/backend.resource';
+import type { SignValue } from '@/schema';
 
-const Wrapper = styled.div`
-  ${displayFlex({})}
-  height: 100vh;
-  background-color: #000;
+const Wrapper = styled.main`
+  width: 100%;
 `;
 
-const Top: NextPage = () => {
-  const onClick = async () => {
-    const guestResource = new GuestResource();
-    const users = await guestResource.getUsers();
+// loginかチェックする
+// 方針としてloginとみなす（recoilに値があれば）
+// expiredを見て
+// 期限が切れていなかったらlogin
+// 期限が切れていたら再度loginを伝える。
+export const getServerSideProps = async () => {
+  let statusCode: number | null = null;
+  /**
+   * @memo window.alert('Hello'); ここでnullアクセスも（500）
+   * throw new Error('status'); 500へ遷移（しかしmessageはとどかない）
+   */
+  // const backendGuestResource = new BackendGuestResource();
+  // ここの中でerrorがfetchされたらerrorページへ飛ばされる。
+  // const users = await backendGuestResource.signIn({ email: '', password: '' });
+  const isLogin = false;
+
+  if (!statusCode && !isLogin) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/user/signin',
+      },
+    };
+  }
+
+  return {
+    props: {
+      statusCode,
+    },
+  };
+};
+
+type Props = InferGetServerSidePropsType<typeof getServerSideProps>;
+
+const Top: NextPage<Props> = ({ statusCode }) => {
+  const onSubmit = async (singValue: SignValue) => {
+    // validationをして
+    const backendGuestResource = new BackendGuestResource();
+    const users = await backendGuestResource.signIn(singValue);
+    // TODO useState or Recoil
     console.log(`users ${users}`);
   };
 
   return (
-    <Wrapper>
-      <Button onClick={onClick}>API接続</Button>
-    </Wrapper>
+    <>
+      {statusCode ? (
+        <Error statusCode={statusCode}></Error>
+      ) : (
+        <Wrapper>
+          <TopTpl onSubmit={onSubmit} />
+        </Wrapper>
+      )}
+    </>
   );
 };
 

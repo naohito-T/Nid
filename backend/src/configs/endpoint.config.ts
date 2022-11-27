@@ -1,9 +1,17 @@
-export const commonVersionPath = '/v1';
+// health check用
+export const healthCheckPath = '/health';
 
-export const GuestEndpoints = {};
+// resource全てに対し、プレフィックスにつくpath
+export const commonVersionPath = '/api/v1';
+
+export const GuestEndpoints = {
+  signUp: 'sign-up',
+  signIn: 'sign-in',
+};
 
 export const UserEndpoints = {
   users: '/users',
+  me: '/users/me',
 };
 
 export const AdminEndpoints = {};
