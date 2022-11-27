@@ -1,7 +1,7 @@
 import { faker as F } from '@faker-js/faker/locale/ja';
 import { generateSex } from '@/__tests__/helper';
 import { generateJaAddress } from './address';
-import { User, Address } from '@/schema';
+import { User } from '@/schema';
 
 type CommonUser = Omit<User, 'id' | 'createdAt' | 'updatedAt'>;
 

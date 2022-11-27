@@ -35,8 +35,8 @@ export class User extends BaseUProperties {
   @Column('varchar', { name: 'last_name', comment: UserComments.lastName })
   lastName: string;
 
-  @Column('timestamp', { name: 'birth_date', nullable: true, comment: UserComments.birthDay })
-  birthDate: Date | null;
+  @Column('varchar', { name: 'birth_date', nullable: true, comment: UserComments.birthDay })
+  birthDate: string | null;
 
   @Column('enum', { name: 'sex', enum: SexType, comment: UserComments.sex })
   sex: SexType;

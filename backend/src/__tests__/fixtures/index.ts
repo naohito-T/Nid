@@ -1,2 +1,2 @@
-export * from './user';
+export * from './user.fixture';
 export * from './address';

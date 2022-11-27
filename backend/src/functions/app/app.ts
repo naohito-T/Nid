@@ -19,13 +19,15 @@ export class Application {
   private app: express.Express;
   private ds: DataSource | undefined;
   private isTest: boolean;
-  private isDBInitialized: boolean;
+  private isAppDBInitialized: boolean;
+  private isTestDBInitialized: boolean;
 
   public constructor(isTest: boolean = false, isDBInitialized: boolean = false) {
     this.app = express();
     this.isTest = isTest;
-    this.isDBInitialized = isDBInitialized;
+    this.isAppDBInitialized = isDBInitialized;
     this.ds = undefined;
+    this.isTestDBInitialized = false;
   }
 
   public get getApp() {
@@ -48,11 +50,11 @@ export class Application {
    */
   private settingDatabase = async () => {
     // testモードではなくdbが起動していない場合
-    if (!this.isTest && !this.isDBInitialized) {
+    if (!this.isTest && !this.isAppDBInitialized) {
       try {
         this.ds = await AppDataSource.initialize();
         // 起動フラグを配置する。
-        this.isDBInitialized = this.ds.isInitialized;
+        this.isAppDBInitialized = this.ds.isInitialized;
       } catch (e: unknown) {
         messageLogger.error(e);
         throw new SetupDBError(UN_DB_SETUP.message, UN_DB_SETUP.statusCode);
