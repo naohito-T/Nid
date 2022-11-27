@@ -41,8 +41,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - id: setup_node
-        uses: ./.github/workflows/composite/setup_node.yml
+      - name: Composite Setup node
+        uses: ./.github/workflows/actions/setup-node
         with:
           name: ${{ matrix.node-version }}
 
