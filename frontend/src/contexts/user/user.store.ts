@@ -20,3 +20,23 @@ const itemStateFamily = atomFamily({
   key: 'sample/item',
   default: 0,
 });
+
+/**
+ *
+ */
+
+/**
+ * @desc loginしたuser state
+ * @option loginしたUserIDをロギングする。
+ * @see https://zenn.dev/riemonyamada/articles/ad38200a1c7fa3
+ */
+const currentUserState = atom({
+  key: 'currentUserId',
+  default: null,
+  effects: [
+    // atomの値更新があるたびに引数に入れたコールバックを実行してくれる。
+    ({ onSet }) => {
+      onSet((newId) => {});
+    },
+  ],
+});

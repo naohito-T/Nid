@@ -11,6 +11,7 @@ import { generateJWT } from '@/middleware/jwt';
 export class FrontendGuestResource extends FrontendBase implements IGuestFrontendResource {
   public signUp = async (signValue: SignValue): Promise<string> => {
     // email取得
+
     await GuestRepository.findByEmail(signValue.email);
     // 新規作成（user）＆ resを返す。
     // create してから

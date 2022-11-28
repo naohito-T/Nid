@@ -12,8 +12,5 @@ naohito-T Provides login functionality for client projects.
 
 ---
 
-## Frontend
 
-Project start.
-`npx create-next-app@latest frontend --ts`
 

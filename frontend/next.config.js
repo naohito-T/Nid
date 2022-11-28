@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
+const withInterceptStdout = require('next-intercept-stdout')
+
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
@@ -7,15 +9,19 @@ const nextConfig = {
   compiler: {
     styledComponents: true,
   },
+  // scroll位置をBrowser history likeに復元する。
+  experimental: {
+    scrollRestoration: true,
+  },
   async redirects() {
     return [
       {
         source: '/user',
         destination: '/',
-        permanent: true, // 永続的なリダイレクトかのフラグ 永続的？
+        permanent: true, // 永続的なリダイレクトか（一時的なリダイレクトではないか）
       }
     ]
   }
 };
 
-module.exports = nextConfig;
+module.exports = withInterceptStdout(nextConfig,  (text) => (text.includes('Duplicate atom key') ? '' : text));

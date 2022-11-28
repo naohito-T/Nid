@@ -11,3 +11,6 @@ DBクライアントによっては自動で作成してくれるためそれを
 また、作成したER図はおいてあります
 [作成参考](https://dev.classmethod.jp/articles/typeorm-er-diagram/)
 
+
+[マテリアルテーブルで買い物表を記載る](https://dev.classmethod.jp/articles/material-table-fix-the-header/)
+

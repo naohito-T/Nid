@@ -44,6 +44,9 @@ export const getServerSideProps = async () => {
 type Props = InferGetServerSidePropsType<typeof getServerSideProps>;
 
 const Top: NextPage<Props> = ({ statusCode }) => {
+  /**
+   * @todo loginしているかにmeを使う？useSWR
+   */
   const onSubmit = async (singValue: SignValue) => {
     // validationをして
     const backendGuestResource = new BackendGuestResource();

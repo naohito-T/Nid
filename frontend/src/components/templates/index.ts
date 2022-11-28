@@ -1,3 +1,4 @@
+export * from './theme/theme.tpl';
 export * from './top/top.tpl';
 export * from './signup/signup.tpl';
 export * from './signin/signin.tpl';

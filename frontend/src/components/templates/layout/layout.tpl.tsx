@@ -1,7 +1,7 @@
 import type { NextComponentType, NextPageContext } from 'next';
 import styled from 'styled-components';
 
-import { Progress } from '@/components/molecules';
+import { Progress, Header } from '@/components/molecules';
 
 type Props = {
   isProgress: boolean;
@@ -18,7 +18,14 @@ export const LayoutTpl: NextComponentType<NextPageContext, null, Props> = ({
 }) => {
   return (
     <Wrapper data-testid='layout-tpl'>
-      {isProgress ? <Progress isProgress={isProgress} /> : <MainWrap>{children}</MainWrap>}
+      {isProgress ? (
+        <Progress isProgress={isProgress} />
+      ) : (
+        <>
+          <Header />
+          <MainWrap>{children}</MainWrap>
+        </>
+      )}
     </Wrapper>
   );
 };

@@ -30,8 +30,8 @@ AppError.getInitialProps = async ({ res, err }) => {
   let message = res ? res.statusMessage : err ? err.message : 'Internal Server Error.';
   // WORKAROUND なぜかundefinedの推測が外れない
   if (!statusCode) statusCode = 500;
-  console.log(`console${statusCode}`);
-  console.log(`console${message}`);
+  console.log(`_error.page${statusCode}`);
+  console.log(`_error.page${message}`);
   return { statusCode, message };
 };
 

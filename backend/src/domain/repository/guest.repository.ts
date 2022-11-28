@@ -15,6 +15,7 @@ interface CustomGuestRepository {
 
 /**
  * @desc Guest権限でdbへ接続する処理をまとめたリポジトリ
+ * @NOTE select以外はトランザクションを使用する。
  */
 export const GuestRepository = AppDataSource.getRepository(User).extend<CustomGuestRepository>({
   /** @desc email with name */
@@ -23,13 +24,30 @@ export const GuestRepository = AppDataSource.getRepository(User).extend<CustomGu
   //   return user;
   // },
 
+  /**
+   * @desc Emailが存在するか確認する。
+   */
   async findByEmail(email: string): Promise<boolean> {
-    const user = await GuestRepository.findOne({ where: { email } });
+    const user = await this.findOne({ where: { email } });
     if (user.email) {
       throw new DuplicateError(DUPLICATE_EMAIL.message, DUPLICATE_EMAIL.statusCode);
     }
     return true;
   },
+
+  /**
+   * @desc Emailが存在するか確認する。
+   */
+  // async createUser(email: string): Promise<boolean> {
+  //   // TODO トランザクション
+  //   AppDataSource.transaction(async () => {
+  //     const user = await this.create({
+
+  //     })
+  //     return user;
+
+  //   })
+  // },
 
   // Authとくっつけたやつを返さないといけない。
   // async registerNewUser(signValue: SignValue): Promise<User> {},

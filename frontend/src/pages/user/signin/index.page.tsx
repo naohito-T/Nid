@@ -2,10 +2,11 @@ import type { NextPage, InferGetServerSidePropsType } from 'next';
 import Error from 'next/error';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { progressState } from '@/contexts/common';
+import { progressAtom } from '@/contexts/common';
 import { SignValueScheme } from '@/schema';
 import { SignInTpl, LayoutTpl } from '@/components/templates';
 import { BackendGuestResource } from '@/apis/resources/guest/backend.resource';
+import useSWR from 'swr';
 
 import type { SignValue } from '@/schema';
 
@@ -31,7 +32,7 @@ export const getServerSideProps = async () => {
 type Props = InferGetServerSidePropsType<typeof getServerSideProps>;
 
 const SingIn: NextPage<Props> = ({ statusCode }) => {
-  const [isProgress, setIsProgress] = useRecoilState(progressState);
+  const [isProgress, setIsProgress] = useRecoilState(progressAtom);
 
   // validationをして成功であればprogressを外す
   const onSubmit = async (signValue: SignValue) => {
