@@ -1,14 +1,8 @@
 import { ReactNode, useEffect, useState, useMemo } from 'react';
 import type { NextComponentType, NextPageContext } from 'next';
-import {
-  Box,
-  createTheme,
-  CssBaseline,
-  Switch,
-  ThemeProvider,
-  PaletteMode,
-  useMediaQuery,
-} from '@mui/material';
+import { createTheme, CssBaseline, ThemeProvider, PaletteMode, useMediaQuery } from '@mui/material';
+import Box from '@mui/material/Box';
+import Switch from '@mui/material/Switch';
 import { usePaletteMode } from '@/hooks';
 
 type Props = {
@@ -16,16 +10,12 @@ type Props = {
 };
 
 export const ThemeTpl: NextComponentType<NextPageContext, null, Props> = ({ children }) => {
-  const paletteModeStorageKey = 'palette_mode';
-  const prefersPaletteMode = useMediaQuery('(prefers-color-scheme: dark)') ? 'dark' : 'light';
   const [paletteMode, setPaletteMode] = usePaletteMode();
   const [isDarkMode, setIsDarkMode] = useState(paletteMode === 'dark');
 
-  // const theme = createTheme({
-  //   palette: {
-  //     mode: paletteMode,
-  //   },
-  // });
+  /**
+   * @desc memo化 ここの値を変更しないと
+   */
   const theme = useMemo(
     () =>
       createTheme({
@@ -45,17 +35,11 @@ export const ThemeTpl: NextComponentType<NextPageContext, null, Props> = ({ chil
   const handleChangePaletteMode = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPaletteMode(event.target.checked ? 'dark' : 'light');
     setIsDarkMode(event.target.checked);
-    localStorage.setItem(paletteModeStorageKey, paletteMode);
   };
 
   useEffect(() => {
-    const paletteMode = localStorage.getItem(paletteModeStorageKey) ?? prefersPaletteMode;
-    if (['light', 'dark'].includes(paletteMode)) {
-      setPaletteMode(paletteMode as PaletteMode);
-      setIsDarkMode(paletteMode === 'dark');
-      localStorage.setItem(paletteModeStorageKey, paletteMode);
-    }
-  }, []);
+    setIsDarkMode(paletteMode === 'dark');
+  }, [paletteMode]);
 
   return (
     <ThemeProvider theme={theme}>

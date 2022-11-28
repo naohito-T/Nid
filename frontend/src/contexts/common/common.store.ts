@@ -1,36 +1,20 @@
 import { atom, AtomEffect } from 'recoil';
 import type { PaletteMode } from '@mui/material';
-import { PALETTE_MODE_STORAGE_KEY } from './common.key';
+import { CommonAtomKey, CommonAtomStorageKey } from './common.key';
+
 /**
  * @desc progress bar用
  */
 export const progressAtom = atom({
-  key: 'progressKey',
+  key: CommonAtomKey.PROGRESS_KEY,
   default: false,
 });
 
 /**
  * @desc Theme 切り替え用
+ * @NOTE onSet atomの値変更があるたびに引数に入れたコールバックを実行してくれる。
  */
-
-// const localStorageEffect =
-//   (key: string): AtomEffect<ThemeMode> =>
-//   ({ setSelf, onSet }) => {
-//     const stored = localStorage.getItem(key);
-//     if (stored === 'dark' || stored === 'light') {
-//       setSelf(stored);
-//     }
-
-//     onSet((value, _, isReset) => {
-//       if (isReset) {
-//         localStorage.removeItem(key);
-//       } else {
-//         localStorage.setItem(key, value || _);
-//       }
-//     });
-//   };
-
-const paletteEffect: (key: string) => AtomEffect<PaletteMode> =
+const paletteEffect: (key: string) => AtomEffect<PaletteMode | undefined> =
   (key) =>
   ({ onSet }) => {
     onSet((newValue, _, isReset) => {
@@ -38,13 +22,12 @@ const paletteEffect: (key: string) => AtomEffect<PaletteMode> =
         localStorage.removeItem(key);
         return;
       }
-
       localStorage.setItem(key, newValue);
     });
   };
 
-export const paletteAtom = atom<PaletteMode>({
-  key: 'app_palette_mode',
-  default: 'dark',
-  effects: [paletteEffect(PALETTE_MODE_STORAGE_KEY)],
+export const paletteAtom = atom<PaletteMode | undefined>({
+  key: CommonAtomKey.PALETTE_ATOM_KEY,
+  default: undefined,
+  effects: [paletteEffect(CommonAtomStorageKey.PALETTE_MODE_STORAGE_KEY)],
 });

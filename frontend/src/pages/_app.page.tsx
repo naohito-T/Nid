@@ -18,6 +18,7 @@ const App = ({ Component, pageProps }: AppProps<PageProps>) => {
   if (pageProps.error) {
     return <Error statusCode={pageProps.error.statusCode} title={pageProps.error.message} />;
   }
+
   messageLogger.debug({
     msg: `Started App ${process.env.NODE_ENV}`,
     file: __filename,
