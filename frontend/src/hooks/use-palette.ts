@@ -1,6 +1,5 @@
-// import '../styles/globals.css';
-import { useMemo, useState, useEffect } from 'react';
-import { createTheme, useMediaQuery, PaletteMode } from '@mui/material';
+import { useEffect } from 'react';
+import { useMediaQuery, PaletteMode } from '@mui/material';
 import { useRecoilState } from 'recoil';
 import { paletteAtom, CommonAtomStorageKey } from '@/contexts/common';
 
