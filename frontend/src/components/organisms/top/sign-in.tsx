@@ -2,9 +2,10 @@ import type { NextComponentType, NextPageContext } from 'next';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { SignValue } from '@/schema';
+import type { SignValue, SignFlow } from '@/schema';
 import { SignValueScheme } from '@/schema';
 
+import { SnsSign } from '@/components/molecules';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -19,6 +20,7 @@ import Typography from '@mui/material/Typography';
 
 type Props = {
   onSubmit: (singValue: SignValue) => Promise<void>;
+  onSnsLogin: (flow: SignFlow) => void;
 };
 
 /** 全体の設定 */
@@ -26,7 +28,10 @@ const Wrapper = styled.section`
   width: 100%;
 `;
 
-export const SignIn: NextComponentType<NextPageContext, null, Props> = ({ onSubmit }) => {
+export const SignIn: NextComponentType<NextPageContext, null, Props> = ({
+  onSubmit,
+  onSnsLogin,
+}) => {
   const {
     register,
     handleSubmit,
@@ -110,6 +115,23 @@ export const SignIn: NextComponentType<NextPageContext, null, Props> = ({ onSubm
               <Button type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
                 Sign In
               </Button>
+
+              <Typography
+                component='h5'
+                variant='h5'
+                sx={{
+                  width: '100%',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  marginBottom: '15px',
+                }}
+              >
+                or
+              </Typography>
+              {/* SNS */}
+              <Box component='div'>
+                <SnsSign onClick={onSnsLogin} />
+              </Box>
               <Grid container>
                 <Grid item xs>
                   <Link href='#' variant='body2'>

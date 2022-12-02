@@ -1,10 +1,11 @@
 import type { NextComponentType, NextPageContext } from 'next';
 import styled from 'styled-components';
 import { SignIn } from '@/components/organisms/top';
-import type { SignValueType } from '@/schema';
+import type { SignValue, SignFlow } from '@/schema';
 
 type Props = {
-  onSubmit: (singValue: SignValueType) => Promise<void>;
+  onSubmit: (singValue: SignValue) => Promise<void>;
+  onSnsLogin: (flow: SignFlow) => void;
 };
 
 /** 全体の設定 */
@@ -15,21 +16,13 @@ const Wrapper = styled.div`
 /**
  * @desc loginしていたらログインにする
  */
-export const SignInTpl: NextComponentType<NextPageContext, null, Props> = ({ onSubmit }) => {
+export const SignInTpl: NextComponentType<NextPageContext, null, Props> = ({
+  onSubmit,
+  onSnsLogin,
+}) => {
   return (
     <Wrapper data-testid='top-tpl'>
-      <SignIn onSubmit={onSubmit} />
-      <section>
-        {/* <Button onClick={onClick}>API接続</Button>
-
-    <Link href={'/user/sing-up'} passHref>
-      <p className='text'>Sing-up</p>
-    </Link>
-
-    <Link href={'/user/sing-in'} passHref>
-      <p className='text'>Sing-up</p>
-    </Link> */}
-      </section>
+      <SignIn onSubmit={onSubmit} onSnsLogin={onSnsLogin} />
     </Wrapper>
   );
 };

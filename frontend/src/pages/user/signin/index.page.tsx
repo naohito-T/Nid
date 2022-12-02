@@ -1,14 +1,15 @@
+import React, { useCallback } from 'react';
 import type { NextPage, InferGetServerSidePropsType } from 'next';
 import Error from 'next/error';
 import { useRecoilState } from 'recoil';
+import useSWR from 'swr';
 import styled from 'styled-components';
+import type { SignValue, SignFlow } from '@/schema';
+
 import { progressAtom } from '@/contexts/common';
 import { SignValueScheme } from '@/schema';
 import { SignInTpl, LayoutTpl } from '@/components/templates';
 import { BackendGuestResource } from '@/apis/resources/guest/backend.resource';
-import useSWR from 'swr';
-
-import type { SignValue } from '@/schema';
 
 const Wrapper = styled.div``;
 
@@ -35,7 +36,7 @@ const SingIn: NextPage<Props> = ({ statusCode }) => {
   const [isProgress, setIsProgress] = useRecoilState(progressAtom);
 
   // validationをして成功であればprogressを外す
-  const onSubmit = async (signValue: SignValue) => {
+  const onSubmit = useCallback(async (signValue: SignValue) => {
     setIsProgress(true);
     // 検証
     const parsedSignValue = await SignValueScheme.parseAsync(signValue);
@@ -45,11 +46,23 @@ const SingIn: NextPage<Props> = ({ statusCode }) => {
     const tmpCode = await backendGuestResource.signUp(parsedSignValue);
     console.log(tmpCode);
     await new Promise((r) => setTimeout(r, 5000)).finally(() => setIsProgress(false));
-  };
+  }, []);
+
+  const onSnsLogin = useCallback(async (flow: SignFlow) => {
+    setIsProgress(true);
+    console.log(flow);
+    await new Promise((r) => setTimeout(r, 5000)).finally(() => setIsProgress(false));
+  }, []);
+
+  // const a = React.memo(<SignInTpl onSubmit={onSubmit} onSnsClick={onSnsLogin} />)
 
   return (
     <LayoutTpl isProgress={isProgress}>
-      {statusCode ? <Error statusCode={statusCode}></Error> : <SignInTpl onSubmit={onSubmit} />}
+      {statusCode ? (
+        <Error statusCode={statusCode}></Error>
+      ) : (
+        <SignInTpl onSubmit={onSubmit} onSnsLogin={onSnsLogin} />
+      )}
     </LayoutTpl>
   );
 };

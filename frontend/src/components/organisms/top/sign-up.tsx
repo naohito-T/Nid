@@ -2,10 +2,11 @@ import type { NextComponentType, NextPageContext } from 'next';
 import styled from 'styled-components';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { SignValue } from '@/schema';
-import { SingValueScheme } from '@/schema';
+import type { SignValue, SignFlow } from '@/schema';
+import { SignValueScheme } from '@/schema';
 
-import * as React from 'react';
+import { SnsSign } from '@/components/molecules';
+
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -20,8 +21,8 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 
 type Props = {
-  // login or singUp
   onSubmit: (singValue: SignValue) => Promise<void>;
+  onSnsLogin: (flow: SignFlow) => void;
 };
 
 /** 全体の設定 */
@@ -29,24 +30,24 @@ const Wrapper = styled.section`
   width: 100%;
 `;
 
-export const SingUp: NextComponentType<NextPageContext, null, Props> = ({}) => {
+export const SingUp: NextComponentType<NextPageContext, null, Props> = ({
+  onSubmit,
+  onSnsLogin,
+}) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<SignValue>({
-    resolver: zodResolver(SingValueScheme),
+    resolver: zodResolver(SignValueScheme),
   });
 
-  const onSubmit: SubmitHandler<SignValue> = (data) => console.log(data);
   const errorEmail = errors.email?.message as string;
   const errorPassword = errors.password?.message as string;
 
   return (
     <Wrapper data-testid='login-form'>
-      {/*  */}
       <Grid container component='main' sx={{ height: '100vh' }}>
-        <CssBaseline />
         <Grid
           item
           xs={false}
@@ -126,6 +127,10 @@ export const SingUp: NextComponentType<NextPageContext, null, Props> = ({}) => {
                     label='I want to receive inspiration, marketing promotions and updates via email.'
                   />
                 </Grid>
+                {/* SNS */}
+                <Box component='div'>
+                  <SnsSign onClick={onSnsLogin} />
+                </Box>
               </Grid>
               <Button type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
                 Sign Up

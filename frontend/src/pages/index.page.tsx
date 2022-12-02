@@ -57,13 +57,9 @@ const Top: NextPage<Props> = ({ statusCode }) => {
 
   return (
     <>
-      {statusCode ? (
-        <Error statusCode={statusCode}></Error>
-      ) : (
-        <Wrapper>
-          <TopTpl onSubmit={onSubmit} />
-        </Wrapper>
-      )}
+      <Wrapper>
+        {statusCode ? <Error statusCode={statusCode}></Error> : <TopTpl onSubmit={onSubmit} />}
+      </Wrapper>
     </>
   );
 };

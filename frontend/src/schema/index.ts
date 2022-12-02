@@ -11,5 +11,7 @@ const checkSchema =
 
 export * from './user';
 export * from './header';
+export * from './sign-flow';
 export * from './sign-value';
-export * from './tmp-token'
+export * from './tmp-token';
+export * from './error-res';

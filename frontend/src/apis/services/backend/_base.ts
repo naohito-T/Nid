@@ -1,5 +1,13 @@
 import Axios, { AxiosInstance } from 'axios';
-import { Result, Success, Failure, ErrorResponse } from '@/libs/error';
+import {
+  Result,
+  Success,
+  Failure,
+  UnexpectedError,
+  UNEXPECTED,
+  AxiosError,
+  NIDError,
+} from '@/libs/error';
 import { fetchLogger, eventLogger } from '@/middleware/log';
 export class BackendBase {
   private readonly baseURL;
@@ -59,7 +67,7 @@ export class BackendBase {
     path: string,
     headers?: object,
     retry: number = 3,
-  ): Promise<Result<Awaited<Promise<T>>, ErrorResponse>> => {
+  ): Promise<Result<Awaited<Promise<T>>, NIDError>> => {
     let count = 0;
     try {
       const data = await this.axios.get<T>(path, { headers }).then((r) => r.data);
@@ -68,19 +76,22 @@ export class BackendBase {
     } catch (e: unknown) {
       fetchLogger.info({ msg: 'Get Error', file: 'backend base' });
       if (Axios.isAxiosError(e)) {
-        if (count === retry) {
-          return new Failure(new ErrorResponse('backend base', e.status, e.code, e));
-        }
+        // if (count === retry) {
+        //   return new Failure(new ErrorResponse('backend base', e.status, e.code, e));
+        // }
         // ネットワークエラー時はerrorのオブジェクトの中にそもそもオブジェクトで返ってこないためリトライさせる。
-        if (!e.response) {
-          count = await this.fetchRetry(count);
-          await this.axios.get<T>(path, { headers }).then((r) => r.data);
-        } else {
-          return new Failure(new ErrorResponse('backend base', e.status, e.code, e));
-        }
+        // if (!e.response) {
+        //   count = await this.fetchRetry(count);
+        //   await this.axios.get<T>(path, { headers }).then((r) => r.data);
+        // } else {
+        //   return new Failure(new ErrorResponse('backend base', e.status, e.code, e));
+        // }
+        return new Failure(new AxiosError(e.message, e.status, e.code));
       }
       // 予期せぬエラー
-      return new Failure(new ErrorResponse('backend base', undefined, undefined, e as Error));
+      return new Failure(
+        new UnexpectedError(UNEXPECTED.message, UNEXPECTED.statusCode, UNEXPECTED.code),
+      );
     }
   };
 
@@ -94,7 +105,7 @@ export class BackendBase {
     path: string,
     payload: V,
     retry: number = 3,
-  ): Promise<Result<Awaited<Promise<T>>, ErrorResponse>> => {
+  ): Promise<Result<Awaited<Promise<T>>, NIDError>> => {
     let count = 0;
     try {
       fetchLogger.info({ msg: 'Post Start.', service: 'Backend' });
@@ -103,30 +114,34 @@ export class BackendBase {
     } catch (e: unknown) {
       fetchLogger.info({ msg: 'Post Error', service: 'Backend' });
       if (Axios.isAxiosError(e)) {
-        if (count === retry) {
-          return new Failure(new ErrorResponse('backend base', e.status, e.code, e));
-        }
+        // if (count === retry) {
+        //   return new Failure(new ErrorResponse('backend base', e.status, e.code, e));
+        // }
         // ネットワークエラー時はerrorのオブジェクトの中にそもそもオブジェクトで返ってこないためリトライさせる。
-        if (!e.response) {
-          count = await this.fetchRetry(count);
-          await this.axios.post<T>(path, { data: payload }).then((r) => r.data);
-        } else {
-          return new Failure(new ErrorResponse('backend base', e.status, e.code, e));
-        }
+        // if (!e.response) {
+        //   count = await this.fetchRetry(count);
+        //   await this.axios.post<T>(path, { data: payload }).then((r) => r.data);
+        // } else {
+        //   return new Failure(new ErrorResponse('backend base', e.status, e.code, e));
+        // }
+        return new Failure(new AxiosError(e.message, e.status, e.code));
       }
       // 予期せぬエラー
-      return new Failure(new ErrorResponse('backend base', undefined, undefined, e as Error));
+      return new Failure(
+        new UnexpectedError(UNEXPECTED.message, UNEXPECTED.statusCode, UNEXPECTED.code),
+      );
     }
   };
 
   /**
    * @desc GuestResource ユーティリティ Logs（ここにdatadog or sentry）
    */
-  protected interceptLogs = (functionName: string, statusCode: number, code: string) => {
+  protected interceptLogs = (message: string, statusCode: number, code: string, name: string) => {
     eventLogger.error({
-      functionName,
+      message,
       statusCode,
       code,
+      name,
     });
   };
 }

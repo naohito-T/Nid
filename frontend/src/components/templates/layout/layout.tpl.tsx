@@ -1,6 +1,5 @@
 import type { NextComponentType, NextPageContext } from 'next';
 import styled from 'styled-components';
-
 import { Progress, Header } from '@/components/molecules';
 
 type Props = {

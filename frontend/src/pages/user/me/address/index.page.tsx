@@ -1,11 +1,12 @@
 import type { NextPage, InferGetServerSidePropsType } from 'next';
 import Error from 'next/error';
 import styled from 'styled-components';
+import { useRecoilState } from 'recoil';
 
-import { AddressTpl } from '@/components/templates';
-import { BackendGuestResource } from '~/apis/resources/guest/backend.resource';
-import Link from 'next/link';
-import type { SignValueType } from '@/schema';
+import { AddressTpl, LayoutTpl } from '@/components/templates';
+import { progressAtom } from '@/contexts/common';
+
+import type { SignValue } from '@/schema';
 
 const Wrapper = styled.div``;
 
@@ -29,7 +30,12 @@ export const getServerSideProps = async () => {
 type Props = InferGetServerSidePropsType<typeof getServerSideProps>;
 
 const Address: NextPage<Props> = ({ statusCode }) => {
-  const onSubmit = async (singValue: SignValueType) => {
+  const [isProgress, setIsProgress] = useRecoilState(progressAtom);
+
+  /**
+   * 変更する値だけを抽出する必要。
+   */
+  const onSubmit = async (singValue: SignValue) => {
     // validationをして
     // const backendGuestResource = new BackendGuestResource();
     // const users = await backendGuestResource.singIn(singValue);
@@ -37,20 +43,10 @@ const Address: NextPage<Props> = ({ statusCode }) => {
     // console.log(`users ${users}`);
   };
 
-  const onLoginForEmail = (email: string, password: string) => {
-    console.log('email');
-  };
-
   return (
-    <>
-      {statusCode ? (
-        <Error statusCode={statusCode}></Error>
-      ) : (
-        <Wrapper>
-          <AddressTpl onSubmit={onSubmit} />
-        </Wrapper>
-      )}
-    </>
+    <LayoutTpl isProgress={isProgress}>
+      {statusCode ? <Error statusCode={statusCode}></Error> : <AddressTpl onSubmit={onSubmit} />}
+    </LayoutTpl>
   );
 };
 

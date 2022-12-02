@@ -1,16 +1,16 @@
+import React, { useCallback } from 'react';
 import type { NextPage, InferGetServerSidePropsType } from 'next';
 import Error from 'next/error';
+import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { SignUpTpl } from '@/components/templates';
-import { displayFlex } from '@/styles/styled-components';
+import { SignUpTpl, LayoutTpl } from '@/components/templates';
 import { BackendGuestResource } from '@/apis/resources/guest/backend.resource';
-import type { SignValueType } from '@/schema';
+import { progressAtom } from '@/contexts/common';
+import type { SignValue, SignFlow } from '@/schema';
+import { SignValueScheme } from '@/schema';
 
-const Wrapper = styled.div`
-  /* ${displayFlex({})}
-  height: 100vh;
-  background-color: #000; */
-`;
+const Wrapper = styled.div``;
+
 export const getServerSideProps = async () => {
   let statusCode: number | null = null;
   /**
@@ -31,24 +31,34 @@ export const getServerSideProps = async () => {
 type Props = InferGetServerSidePropsType<typeof getServerSideProps>;
 
 const SingUp: NextPage<Props> = ({ statusCode }) => {
-  const onSubmit = async (singValue: SignValueType) => {
-    // validationをして
-    // const backendGuestResource = new BackendGuestResource();
-    // const users = await backendGuestResource.singIn(singValue);
-    // // TODO useState or Recoil
-    // console.log(`users ${users}`);
+  const [isProgress, setIsProgress] = useRecoilState(progressAtom);
+  // validationをして成功であればprogressを外す
+  const onSubmit = async (signValue: SignValue) => {
+    setIsProgress(true);
+    // 検証
+    const parsedSignValue = await SignValueScheme.parseAsync(signValue);
+
+    // TODO stateを作成しrecoilに保存
+    const backendGuestResource = new BackendGuestResource();
+    const tmpCode = await backendGuestResource.signUp(parsedSignValue);
+    console.log(tmpCode);
+    await new Promise((r) => setTimeout(r, 5000)).finally(() => setIsProgress(false));
   };
 
+  const onSnsLogin = useCallback(async (flow: SignFlow) => {
+    setIsProgress(true);
+    console.log(flow);
+    await new Promise((r) => setTimeout(r, 5000)).finally(() => setIsProgress(false));
+  }, []);
+
   return (
-    <>
+    <LayoutTpl isProgress={isProgress}>
       {statusCode ? (
         <Error statusCode={statusCode}></Error>
       ) : (
-        <Wrapper>
-          <SignUpTpl onSubmit={onSubmit} />
-        </Wrapper>
+        <SignUpTpl onSubmit={onSubmit} onSnsLogin={onSnsLogin} />
       )}
-    </>
+    </LayoutTpl>
   );
 };
 
