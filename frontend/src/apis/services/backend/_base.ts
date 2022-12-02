@@ -9,6 +9,10 @@ import {
   NIDError,
 } from '@/libs/error';
 import { fetchLogger, eventLogger } from '@/middleware/log';
+
+type GetBaseType<T> = Promise<Result<Awaited<Promise<T>>, NIDError>>;
+type PostBaseType<T> = Promise<Result<Awaited<Promise<T>>, NIDError>>;
+
 export class BackendBase {
   private readonly baseURL;
   private readonly axios;
@@ -63,29 +67,15 @@ export class BackendBase {
    * @param headers
    * @param retry default retry count
    */
-  protected get = async <T>(
-    path: string,
-    headers?: object,
-    retry: number = 3,
-  ): Promise<Result<Awaited<Promise<T>>, NIDError>> => {
+  protected get = async <T>(path: string, headers?: object, retry: number = 3): GetBaseType<T> => {
     let count = 0;
     try {
       const data = await this.axios.get<T>(path, { headers }).then((r) => r.data);
       fetchLogger.info({ msg: 'Get Success', file: 'backend base' });
-      return new Success(data);
+      return new Success(200, data);
     } catch (e: unknown) {
       fetchLogger.info({ msg: 'Get Error', file: 'backend base' });
       if (Axios.isAxiosError(e)) {
-        // if (count === retry) {
-        //   return new Failure(new ErrorResponse('backend base', e.status, e.code, e));
-        // }
-        // ネットワークエラー時はerrorのオブジェクトの中にそもそもオブジェクトで返ってこないためリトライさせる。
-        // if (!e.response) {
-        //   count = await this.fetchRetry(count);
-        //   await this.axios.get<T>(path, { headers }).then((r) => r.data);
-        // } else {
-        //   return new Failure(new ErrorResponse('backend base', e.status, e.code, e));
-        // }
         return new Failure(new AxiosError(e.message, e.status, e.code));
       }
       // 予期せぬエラー
@@ -101,29 +91,16 @@ export class BackendBase {
    * @param payload
    * @param retry default retry count
    */
-  protected post = async <T, V>(
-    path: string,
-    payload: V,
-    retry: number = 3,
-  ): Promise<Result<Awaited<Promise<T>>, NIDError>> => {
+  protected post = async <T, V>(path: string, payload: V, retry: number = 3): PostBaseType<T> => {
     let count = 0;
     try {
       fetchLogger.info({ msg: 'Post Start.', service: 'Backend' });
       const data = await this.axios.post<T>(path, { data: payload }).then((r) => r.data);
-      return new Success(data);
+
+      return new Success(200, data);
     } catch (e: unknown) {
       fetchLogger.info({ msg: 'Post Error', service: 'Backend' });
       if (Axios.isAxiosError(e)) {
-        // if (count === retry) {
-        //   return new Failure(new ErrorResponse('backend base', e.status, e.code, e));
-        // }
-        // ネットワークエラー時はerrorのオブジェクトの中にそもそもオブジェクトで返ってこないためリトライさせる。
-        // if (!e.response) {
-        //   count = await this.fetchRetry(count);
-        //   await this.axios.post<T>(path, { data: payload }).then((r) => r.data);
-        // } else {
-        //   return new Failure(new ErrorResponse('backend base', e.status, e.code, e));
-        // }
         return new Failure(new AxiosError(e.message, e.status, e.code));
       }
       // 予期せぬエラー

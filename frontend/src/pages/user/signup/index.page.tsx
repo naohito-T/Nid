@@ -1,18 +1,18 @@
-import React, { useCallback } from 'react';
-import type { NextPage, InferGetServerSidePropsType } from 'next';
+import React from 'react';
+import type { NextPage, InferGetServerSidePropsType, GetServerSideProps } from 'next';
 import Error from 'next/error';
-import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { SignUpTpl, LayoutTpl } from '@/components/templates';
-import { BackendGuestResource } from '@/apis/resources/guest/backend.resource';
-import { progressAtom } from '@/contexts/common';
-import type { SignValue, SignFlow } from '@/schema';
-import { SignValueScheme } from '@/schema';
+import type { ResFrontError } from '@/schema';
+import { useSignUp } from '@/hooks';
 
 const Wrapper = styled.div``;
 
-export const getServerSideProps = async () => {
+type ServerSideProps = ResFrontError;
+
+export const getServerSideProps: GetServerSideProps<ServerSideProps> = async () => {
   let statusCode: number | null = null;
+  let message: string | null = null;
   /**
    * @memo window.alert('Hello'); ここでnullアクセスも（500）
    * throw new Error('status'); 500へ遷移（しかしmessageはとどかない）
@@ -24,37 +24,23 @@ export const getServerSideProps = async () => {
   return {
     props: {
       statusCode,
+      message,
     },
   };
 };
 
 type Props = InferGetServerSidePropsType<typeof getServerSideProps>;
 
-const SingUp: NextPage<Props> = ({ statusCode }) => {
-  const [isProgress, setIsProgress] = useRecoilState(progressAtom);
-  // validationをして成功であればprogressを外す
-  const onSubmit = async (signValue: SignValue) => {
-    setIsProgress(true);
-    // 検証
-    const parsedSignValue = await SignValueScheme.parseAsync(signValue);
-
-    // TODO stateを作成しrecoilに保存
-    const backendGuestResource = new BackendGuestResource();
-    const tmpCode = await backendGuestResource.signUp(parsedSignValue);
-    console.log(tmpCode);
-    await new Promise((r) => setTimeout(r, 5000)).finally(() => setIsProgress(false));
-  };
-
-  const onSnsLogin = useCallback(async (flow: SignFlow) => {
-    setIsProgress(true);
-    console.log(flow);
-    await new Promise((r) => setTimeout(r, 5000)).finally(() => setIsProgress(false));
-  }, []);
+const SingUp: NextPage<Props> = ({ statusCode, message }) => {
+  const [isProgress, isError, onSubmit, onSnsLogin] = useSignUp();
 
   return (
     <LayoutTpl isProgress={isProgress}>
-      {statusCode ? (
-        <Error statusCode={statusCode}></Error>
+      {(statusCode && message) || (isError.statusCode && isError.message) ? (
+        <Error
+          statusCode={statusCode ?? isError.statusCode ?? 500}
+          title={message ?? isError.message ?? 'Expected Un Error'}
+        ></Error>
       ) : (
         <SignUpTpl onSubmit={onSubmit} onSnsLogin={onSnsLogin} />
       )}

@@ -4,10 +4,26 @@
  */
 export type Result<T, E extends Error> = Success<T> | Failure<E>;
 
+/**
+ * @see https://typescript-jp.gitbook.io/deep-dive/type-system/discriminated-unions
+ */
+
+export interface SuccessKind {
+  kind: 'success';
+  statusCode: number;
+}
+
+export interface ErrorKind {
+  kind: 'error';
+  // statusCode: number;
+}
+
 export class Success<T> {
+  private readonly statusCode: number;
   private readonly value: T;
 
-  constructor(value: T) {
+  constructor(statusCode: number, value: T) {
+    this.statusCode = statusCode;
     this.value = value;
   }
   public isSuccess(): this is Success<T> {
@@ -16,8 +32,12 @@ export class Success<T> {
   public isFailure(): this is Failure<Error> {
     return false;
   }
-  public getSuccessValue(): T {
-    return this.value;
+  public getSuccessValue(): SuccessKind & T {
+    return {
+      kind: 'success',
+      statusCode: this.statusCode,
+      ...this.value,
+    };
   }
 }
 
@@ -33,7 +53,7 @@ export class Failure<E extends Error> {
   public isFailure(): this is Failure<E> {
     return true;
   }
-  public getErrorValue(): E {
-    return this.error;
+  public getErrorValue(): ErrorKind & E {
+    return { kind: 'error', ...this.error };
   }
 }

@@ -14,4 +14,4 @@ export * from './header';
 export * from './sign-flow';
 export * from './sign-value';
 export * from './tmp-token';
-export * from './error-res';
+export * from './error';

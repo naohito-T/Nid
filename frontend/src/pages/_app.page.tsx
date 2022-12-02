@@ -15,9 +15,9 @@ type PageProps = {
  * @NOTE _app.tsxはRecoilRootに囲われていないためusePaletteMode が使用できない
  */
 const App = ({ Component, pageProps }: AppProps<PageProps>) => {
-  if (pageProps.error) {
-    return <Error statusCode={pageProps.error.statusCode} title={pageProps.error.message} />;
-  }
+  // if (pageProps.error) {
+  //   return <Error statusCode={pageProps.error.statusCode} title={pageProps.error.message} />;
+  // }
 
   messageLogger.debug({
     msg: `Started App ${process.env.NODE_ENV}`,
